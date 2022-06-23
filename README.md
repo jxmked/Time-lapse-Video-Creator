@@ -26,9 +26,6 @@ ___Written in Python___
 ___Tested in Termux___
 
 
-### You can send a Support Via GCash
- `+639673271649`
-
 ----
 
 ****Enjoy****
