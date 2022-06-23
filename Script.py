@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import os
-import time
-import base64
+# import time
+# import base64
 import subprocess
 import soundfile
 
+"""
 # --- Timer --- #
 class Timer:
     
@@ -21,6 +22,7 @@ class Timer:
         print("{}: {:.2f}ms".format(m, self.e - self.s))
 
 # !--- Timer ---! #
+"""
 
 class Main:
     inputFolder = "in/"
