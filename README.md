@@ -26,6 +26,9 @@ ___Written in Python___
 ___Tested in Termux___
 
 
+### You can send a Support Via GCash
+ `+639673271649`
+
 ----
 
 ****Enjoy****
@@ -35,6 +38,5 @@ ___Tested in Termux___
 
 - [Github](https://github.com/jxmked)
 - [Facebook](https://www.facebook.com/deguia25)
-- [Buy me some Coffee](https://www.buymeacoffee.com/jxmked)
 
 ### License under Apache-2.0 license
