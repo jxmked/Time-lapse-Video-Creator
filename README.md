@@ -12,11 +12,16 @@ ___Written in Python___
 - Install ffmpeg in Termux/Console (In Termux `pkg install ffmpeg -y`)
 
 ### To Execute
-- Add Video into `in` folder
-- Add Music into `AudioIn` folder
+- Add Your Videos into `in` folder
+- Add Your Desired Music into `AudioIn` folder
 - Then Run `python3 Script.py` and wait 
 
 ___Tested in Termux___
+
+
+### Support via GCash 👉👈🥺
+### ___`+639673271649`___ Thanks
+
 
 ----
 
