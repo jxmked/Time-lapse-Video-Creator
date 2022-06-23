@@ -1,7 +1,22 @@
 # Time-lapse-Video-Creator
 Automate Your Raw Coding Video and Music then let the Your Device to Compile Them in a single output. 
 
+___Written in Python___
+
 ## This is a Beta Version
+
+
+### Requirements
+- ***Remove all .gitkeep files first!!***
+- Install soundfile in python `python3 -m pip install soundfile`
+- Install ffmpeg in Termux/Console (In Termux `pkg install ffmpeg -y`)
+
+### To Execute
+- Add Video into `in` folder
+- Add Music into `AudioIn` folder
+- Then Run `python3 Script.py` and wait 
+
+___Tested in Termux___
 
 ----
 
