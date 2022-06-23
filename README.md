@@ -16,6 +16,13 @@ ___Written in Python___
 - Add Your Desired Music into `AudioIn` folder
 - Then Run `python3 Script.py` and wait 
 
+
+### ***Notes:*** 
+- The file `VideoToMerge.txt` is a System Generated Txt File.
+- The system cannot generate a missing folder.
+- Final Video Output has Filename `Output.mp4`.
+- Remove all Media Files before making new video. Specially on `out`, `AudioOut` Folder.
+
 ___Tested in Termux___
 
 
