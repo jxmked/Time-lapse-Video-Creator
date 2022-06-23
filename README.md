@@ -20,7 +20,7 @@ ___Tested in Termux___
 
 
 ### Support via GCash 👉👈🥺
-### ___`+639673271649`___ Thanks
+#### ___`+639673271649`___ Thanks
 
 
 ----
