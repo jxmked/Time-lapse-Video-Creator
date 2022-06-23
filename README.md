@@ -19,10 +19,6 @@ ___Written in Python___
 ___Tested in Termux___
 
 
-### Support via GCash 👉👈🥺
-#### ___`+639673271649`___ Thanks
-
-
 ----
 
 ****Enjoy****
