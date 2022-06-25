@@ -171,8 +171,8 @@ class Videos:
             exit(0)
         
         if len(files) == 1:
-            x = self.xtl.joinPath(self.fOutput, self.xtl.filename(file[0]))
-            self.xtl.copy(file[0], x)
+            x = self.xtl.joinPath(self.fOutput, self.xtl.filename(files[0]))
+            self.xtl.copy(files[0], x)
             return 0
         
         # Sort files according to it filename to make sure
