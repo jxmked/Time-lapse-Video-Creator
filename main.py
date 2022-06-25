@@ -137,6 +137,23 @@ class Main:
         print("-~" * 10, end="-\n")
         exit(0)
     
+    def mergeVDFR(self):
+        self.isAlone = True
+        self.timer.start()
+        files = self.xtl.getFiles(self.V.fDuplicatedRemoved, self.V.validFormats)
+        self.V.mergeVideoFromDuplicatedFrames(files)
+        print("--" * 5)
+        print("Output file is in `%s`" % self.xtl.joinPath(self.V.fOutput, self.V.mergedFilename))
+        print("--" * 5)
+        
+        self.timer.end()
+        
+        print("~-" * 10, end="~\n")
+        self.timer.printLapse("Finished")
+        print("-~" * 10, end="-\n")
+        
+        exit(0)
+    
     def argAudioVideoMerge(self):
         self.isAlone = True
         self.timer.start()
@@ -271,11 +288,16 @@ FLAGS = {
         "func" : obj.startMergeAudio,
         "description" : "Merge all audio files from input folders."
     },
+    "-mergeV" : {
+        "func" : obj.mergeVDFR,
+        "description" : "Merge all videos from `Video Duplicated Frame Remove`."
+    },
     
     "-mergeAV" : {
         "func" : obj.argAudioVideoMerge,
         "description" : "Merge `ReadyToMergeWithVideo.wav` and `merge.mp4` if they exists."
     },
+    
     "-mergeVA" : {
         "func" : obj.argAudioVideoMerge,
         "description" : "Merge `ReadyToMergeWithVideo.wav` and `merge.mp4` if they exists."
