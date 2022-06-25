@@ -40,6 +40,8 @@ class Main:
         self.V.A = self.A
         self.A.V = self.V
         self.timer = Timer()
+        self.isAlone = False
+        self.helpHere = {}
         pass 
     
     def initialize(self):
@@ -57,17 +59,23 @@ class Main:
                 print("Unable to automatically install libraries/packages.")
                 print("Please install manually in python...\n")
                 print("soundFile")
+                self.ERR.append(1)
                 exit(0)
             
             print("python3 -m pip install soundFile")
             if not console("python3 -m pip install soundFile --no-input") == 0:
                 self.ERR.append(1)
         
-        
-        print("\n\nReady To Run")
+        if len(self.ERR) == 0:
+            print("\nReady To Run")
     
     
     def start(self):
+        if self.isAlone:
+            print("Unable to start.")
+            print("The argument is intended to run alone.")
+            exit(0)
+        
         self.timer.start()
         
         self.A.start(True)
@@ -84,16 +92,18 @@ class Main:
         
     def only(self):
         self.FLAGS[0] = "only"
-        pass
         
     def _help(self):
+        
+        print("Flags with colon (:) at the is required a paramete.r\n")
+        
+        for key in self.helpHere:
+            print(" %s - %s" % (key, self.helpHere[key]['description']))
         exit(0)
-        pass
     
     def fading(self, param):
         self.V.fading(param)
         self.A.fading(param)
-        pass
     
     def merge(self):
         pass
@@ -101,17 +111,31 @@ class Main:
     def setFadeOut(self, param):
         self.V.fadeOut(param)
         self.A.fadeOut(param)
-        pass
+        
     
     def setFadeIn(self, param):
         self.V.fadeIn(param)
         self.A.fadeIn(param)
-        pass
+        
     
     def cleanUpAfter(self):
         print("Warning: All Files System Generated File will be deleted after compiling except the Final Compiled Video.")
         self.toClean = True
-        pass
+        
+    
+    def startMergeAudio(self):
+        self.isAlone = True
+        
+        self.timer.start()
+        
+        self.A.start(True)
+        
+        self.timer.end()
+        
+        print("~-" * 10, end="~\n")
+        self.timer.printLapse("Finished")
+        print("-~" * 10, end="-\n")
+        exit(0)
     
     def arg_initClean(self):
         self.cleanUp()
@@ -135,15 +159,22 @@ class Main:
                 
                 print("%s" % aPath)
         
-        
+    def putHelp(self, obj):
+        self.helpHere = obj
     
 obj = Main()
 
 # Declaration of key-value pair is important
 DECLARED = []
 FLAGS = {
-   # "-help" : obj._help,
-   # "-h" : obj._help,
+    "-help" : {
+        "func" : obj._help,
+        "description" : "Print Help"
+    },
+    "-h" : {
+        "func" : obj._help,
+        "description" : "Print Help"
+    },
     
     "-init" : {
         "func" : obj.initialize,
@@ -223,6 +254,11 @@ FLAGS = {
         "description" : "Overwrite all existing files with new one. Old files will be replace by new generated files."
     },
     
+    "-mergeAudio" : {
+        "func" : obj.startMergeAudio,
+        "description" : "Merge all audio files from input folders."
+    },
+    
     "-start" : {
         "func" : obj.start,
         "description" : "Start Compiling"
@@ -239,6 +275,7 @@ FLAGS = {
     }
 }
 
+obj.putHelp(FLAGS)
 
 # Parameter Handler
 if len(params) == 0:

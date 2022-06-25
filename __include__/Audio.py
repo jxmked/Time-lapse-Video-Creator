@@ -19,7 +19,6 @@ class Audio:
         self.validFormats = ["mp3", "wav", "aac", "ogg", "wma", "flac"]
         
     def start(self, arg):
-        
         self.rawFiles = self.xtl.getFiles(self.xtl.joinPath(self.fInput, ""), self.validFormats)
         self.initTrimMerge(self.rawFiles)
         self.addFadeFilter()
@@ -70,8 +69,10 @@ class Audio:
                     "-af 'silenceremove=start_periods=1:start_silence=0.1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_silence=0.1:start_threshold=-50dB,areverse'",
                     
                     # Output
-                    ("'%s.wav'" % self.xtl.joinPath(self.fTrimmed, self.xtl.filename(file)))
+                    ("'%s.wav'" % self.xtl.joinPath(self.fTrimmed, self.xtl.filename(tmp)))
                 ])
+                
+                self.xtl.rename(self.xtl.joinPath(self.fTrimmed, "%s.wav" % self.xtl.filename(tmp)), self.xtl.joinPath(self.fTrimmed, "%s.wav" % self.xtl.filename(file)))
             except Exception as err:
                 raise Exception(err)
             finally:
@@ -145,16 +146,13 @@ class Audio:
     def fading(self, param):
         self.config['fadeOut'] = self.isValid(param, "Fade")
         self.config['fadeIn'] = self.isValid(param, "Fade")
-        pass
     
     
     def fadeIn(self, param):
         self.config['fadeIn'] = self.isValid(param, "Fade")
-        pass
     
     def fadeOut(self, param):
         self.config['fadeOut'] = self.isValid(param, "Fade")
-        pass
     
     def isValid(self, num, t):
         try:
