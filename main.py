@@ -158,7 +158,7 @@ FLAGS = {
         "func" : obj.V.initRemoveDuplicatedFrames, # Remove Duplicated Frames
         "description" : "Init Remove Duplicated Frames Only"
     },
-    "-crossfadeDuration:" {
+    "-crossfadeDuration:" : {
         "func" : obj.A.setCrossFadeDuration,
         "description" : "Set custom Crossfade Duration in Audio. Effective when having multiple Audio File."
     }
