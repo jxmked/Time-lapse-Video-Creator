@@ -28,7 +28,7 @@ ___I'm still working on detailed instruction___
 ### Compile
 - Add video into `Video In` folder and audio into `Audio In` folder
 - Execute `main.py -s` to start
-- After compiling, final compiled video will be in `root` directory named `Output.mp4` 
+- After compiling, final compiled - `Output.mp4` 
 
 ----
 
