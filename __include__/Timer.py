@@ -16,14 +16,9 @@ class Timer:
     def printLapse(self, mes):
         differ = self.e - self.s
         
-        s = (differ / 1000.0) % 60
+        h = (d / (60 * 60))
+        m = ((d / 60) % 60)
+        s = (d % 60)
+        ms = (d % 100)
         
-        s = round(int(s), 2)
-        
-        m = (differ / (1000 * 60)) % 60
-        
-        m = round(int(m), 2)
-        
-        h = round((differ / (1000 * 60 * 60)) % 24)
-        
-        print("{}: Hours:{}, Minute:{}, Seconds:{}".format(mes, h, m, s))
+        print("{}: Hours:%02d, Minute:%02d, Seconds:%02%.%03d" % (mes, h, m, s, ms))
