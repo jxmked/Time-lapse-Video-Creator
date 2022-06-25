@@ -95,7 +95,7 @@ class Main:
         
     def _help(self):
         
-        print("Flags with colon (:) at the is required a paramete.r\n")
+        print("Flags with colon (:) at the end is required a parameter\n")
         
         for key in self.helpHere:
             print(" %s - %s" % (key, self.helpHere[key]['description']))
