@@ -39,6 +39,7 @@ class Main:
         self.A.fOutput = self.rscOut
         self.V.A = self.A
         self.A.V = self.V
+        self.timer = Timer()
         pass 
     
     def initialize(self):
@@ -67,9 +68,16 @@ class Main:
     
     
     def start(self):
-        self.A.start(True)
+        self.timer.start()
         
+        self.A.start(True)
         self.V.start(True)
+        
+        self.timer.end()
+        
+        print("~-" * 10, end="~\n")
+        self.timer.printLapse("Finished")
+        print("-~" * 10, end="-\n")
         
         if self.toClean:
             self.cleanUp()
