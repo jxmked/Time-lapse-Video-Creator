@@ -28,28 +28,35 @@ class Videos:
         
     
     def start(self, arg):
-        self.rawFiles = self.xtl.getFiles(self.fInput, self.validFormats)
         
-        if len(self.rawFiles) == 0:
-            print("No Available Videos to Compile.\nExit...")
-            exit(0)
-        
-        self.initRemoveDuplicatedFrames(arg)
-        
-        files = []
-        for inf in self.rawFiles:
-            res = self.xtl.joinPath(self.fDuplicatedRemoved, self.xtl.basename(inf))
-            files.append(res)
-        
-        self.mergeVideoFromDuplicatedFrames(files)
+        if arg:
+            
+            self.rawFiles = self.xtl.getFiles(self.fInput, self.validFormats)
+            
+            if len(self.rawFiles) == 0:
+                print("No Available Videos to Compile.\nExit...")
+                exit(0)
+            
+            self.initRemoveDuplicatedFrames(arg)
+            
+            files = []
+            for inf in self.rawFiles:
+                res = self.xtl.joinPath(self.fDuplicatedRemoved, self.xtl.basename(inf))
+                files.append(res)
+            
+            self.mergeVideoFromDuplicatedFrames(files)
         
         merged = self.xtl.joinPath(self.fOutput, self.mergedFilename)
+        readyAudio = self.xtl.joinPath(self.fOutput, "ReadyToMergeWithVideo.wav")
+        
         if not self.xtl.fileExists(merged):
             raise Exception("File %s not found" % merged)
         
-        self.vLen = self.xtl.getVideoLength(merged)
+        if not self.xtl.fileExists(readyAudio):
+            raise Exception("File %s not found" % readyAudio)
         
-        self.aLen = self.A.aLen
+        self.vLen = self.xtl.getVideoLength(merged)
+        self.aLen = self.xtl.getAudioLength(readyAudio)
         
         # Speed up the video until the duration is same as audio file
         
@@ -63,11 +70,14 @@ class Videos:
                     self.aLen - self.config['fadeOut'],
                     self.config['fadeOut']
                 ),
+            
+            # Disable Audio and Subtitle
             "-an -sn",
             
             # Frame Rate and Bitrate
             "-r 30 -b:v 4M",
             
+            # Output format
             "'{}'".format(self.xtl.joinPath(self.fOutput, "ReadyToMergeWithAudio.mp4"))
         ])
         
@@ -81,16 +91,16 @@ class Videos:
             # Ready Audio
             ("-i '%s'" % self.xtl.joinPath(self.fOutput, "ReadyToMergeWithVideo.wav")),
             
-            #"-c:v libx264",
-            "-c:v copy",
-            "-c:a aac",
-            #"-b:v 4M",
-            #"-b:a 44000",
+            #"-c:v libx264", # Reencoding with selected codec. Slow
+            "-c:v copy", 
+            
+            "-c:a aac", # Lessen the file size and still better
+            #"-b:v 4M", # Advance option
+            #"-b:a 44000", # Advance option
             
             "'Output.mp4'"
         ])
     
-        
     def initRemoveDuplicatedFrames(self, arg):
         if not arg:
             # If executed from flag, It will fetch all valid files from input video folder
@@ -103,6 +113,7 @@ class Videos:
         for file in self.rawFiles:
             # We need to switch the current filename into
             # Something different to prevent 'no file' error for some cases
+            # We are also escaping single qoute ' to prevent errors
             
             orig = self.xtl.basename(file)
             
@@ -112,13 +123,14 @@ class Videos:
             self.xtl.rename(file, tmpPath)
             
             # Output path
-            out = self.xtl.joinPath(self.fDuplicatedRemoved, orig)
+            out = self.xtl.joinPath(self.fDuplicatedRemoved, tmp)
             
             # Init Duplicate Frames Remover
             self.removeDuplicatedFrames(tmpPath, out)
             
             # Put back the original name
             self.xtl.rename(tmpPath, file)
+            self.xtl.rename(out, self.xtl.joinPath(self.fDuplicatedRemoved, orig))
         
         if not arg:
             # If we call from argument
@@ -153,15 +165,15 @@ class Videos:
             "'{}'".format(out) # Output File
         ])
     
-    def arg_Merge(self):
-        pass
-        
-        
-        
     def mergeVideoFromDuplicatedFrames(self, files):
         if len(files) == 0:
             print("No Available Videos to Compile.\nExit...")
             exit(0)
+        
+        if len(files) == 1:
+            x = self.xtl.joinPath(self.fOutput, self.xtl.filename(file[0]))
+            self.xtl.copy(file[0], x)
+            return 0
         
         # Sort files according to it filename to make sure
         # that we merge the videos in their corresponding arrangement
@@ -212,21 +224,20 @@ class Videos:
             self.xtl.rename(key, tmp[key])
         
         self.xtl.deleteFile(fname)
-        
+    
+    # Arguments
+    def argAudioVideoMerge(self):
+        self.start(False)
         
     def fading(self, param):
         self.config['fadeOut'] = self.isValid(param)
         self.config['fadeIn'] = self.isValid(param)
-        pass
-    
     
     def fadeIn(self, param):
         self.config['fadeIn'] = self.isValid(param)
-        pass
     
     def fadeOut(self, param):
         self.config['fadeOut'] = self.isValid(param)
-        pass
     
     def isValid(self, num):
         try:
@@ -240,7 +251,7 @@ class Videos:
         raise Exception("Fading duration '%d' is not valid" % num)
     
     def initialize(self):
-        # Check if Folder Exists
+        # Check if Folder Exists and Create if not existing
         self.xtl.createDir(self.fInput)
         self.xtl.createDir(self.fOutput)
         self.xtl.createDir(self.fDuplicatedRemoved)

@@ -17,32 +17,17 @@ class Audio:
         self.xtl = {}
         self.execute = {}
         self.validFormats = ["mp3", "wav", "aac", "ogg", "wma", "flac"]
-        
+    
+    def initialize(self):
+        # Check if Folder Exists and create if not existing
+        self.xtl.createDir(self.fInput)
+        self.xtl.createDir(self.fOutput)
+        self.xtl.createDir(self.fTrimmed)
+    
     def start(self, arg):
         self.rawFiles = self.xtl.getFiles(self.xtl.joinPath(self.fInput, ""), self.validFormats)
         self.initTrimMerge(self.rawFiles)
         self.addFadeFilter()
-    
-    def addFadeFilter(self):
-        fname = "merge.wav"
-        fpath = self.xtl.joinPath(self.fOutput, fname)
-        
-        if not self.xtl.fileExists(fpath):
-            raise Exception("Audio File %s does not exists" % fpath)
-        
-        self.aLen = self.xtl.getAudioLength(fpath)
-        
-        self.execute([
-            "-i '%s'" % fpath,
-            
-            # Set Fading Filter
-            "-af 'afade=t=in:st=0:d={},afade=t=out:st={}:d={}'".format(self.config["fadeIn"], self.aLen - self.config["fadeOut"], self.config["fadeOut"]),
-            
-            "-vn -sn", # Disable Video and Subtitle
-            
-            "'%s'" % self.xtl.joinPath(self.fOutput, "ReadyToMergeWithVideo.wav")
-        ])
-    
     
     def initTrimMerge(self, files):
         if len(files) == 0:
@@ -86,7 +71,7 @@ class Audio:
             self.xtl.copyFile(x, y)
             return 0
         
-        # For morethan 1 audio files
+        # For morethan 1 audio file
         toMerge = {} # To put back audio files previous name
         inp = [] # Input file
         for file in files:
@@ -119,6 +104,55 @@ class Audio:
             for key in toMerge:
                 self.xtl.rename(key, toMerge[key])
         
+    def addFadeFilter(self):
+        # Add Fade-in-out before merging to video
+        
+        fname = "merge.wav"
+        fpath = self.xtl.joinPath(self.fOutput, fname)
+        
+        if not self.xtl.fileExists(fpath):
+            raise Exception("Audio File %s does not exists" % fpath)
+        
+        self.aLen = self.xtl.getAudioLength(fpath)
+        
+        self.execute([
+            "-i '%s'" % fpath,
+            
+            # Set Fading Filter
+            "-af 'afade=t=in:st=0:d={},afade=t=out:st={}:d={}'".format(self.config["fadeIn"], self.aLen - self.config["fadeOut"], self.config["fadeOut"]),
+            
+            "-vn -sn", # Disable Video and Subtitle
+            
+            "'%s'" % self.xtl.joinPath(self.fOutput, "ReadyToMergeWithVideo.wav")
+        ])
+    
+    
+    # Custom parameters
+    def fading(self, param):
+        self.config['fadeOut'] = self.isValid(param, "Fade")
+        self.config['fadeIn'] = self.isValid(param, "Fade")
+    
+    def fadeIn(self, param):
+        self.config['fadeIn'] = self.isValid(param, "Fade")
+    
+    def fadeOut(self, param):
+        self.config['fadeOut'] = self.isValid(param, "Fade")
+    
+    # Other helpers
+    def isValid(self, num, t):
+        try:
+            num = int(num)
+        except:
+            raise Exception("%s value must an integer" % t)
+            
+        if num >= 1 and num <= 20:
+            return num
+        
+        raise Exception("%s duration '%d' is not valid" % (t, num))
+    
+    def setCrossFadeDuration(self, param):
+        self.config["crossFade"] = self.isValid(param, "Crossfade")
+        pass
     
     def createCrossFadeFilter(self, count):
         if count == 1:
@@ -135,44 +169,4 @@ class Audio:
             x += 1
         
         return ("-filter_complex '%s'" % res)
-    
-    def createInlineImport(self, files):
-        arr = []
-        for file in files:
-            arr.append("-i %s" % file)
-        
-        return " ".join(arr)
-    
-    def fading(self, param):
-        self.config['fadeOut'] = self.isValid(param, "Fade")
-        self.config['fadeIn'] = self.isValid(param, "Fade")
-    
-    
-    def fadeIn(self, param):
-        self.config['fadeIn'] = self.isValid(param, "Fade")
-    
-    def fadeOut(self, param):
-        self.config['fadeOut'] = self.isValid(param, "Fade")
-    
-    def isValid(self, num, t):
-        try:
-            num = int(num)
-        except:
-            raise Exception("%s value must an integer" % t)
-            
-        if num >= 1 and num <= 20:
-            return num
-        
-        raise Exception("%s duration '%d' is not valid" % (t, num))
-    
-    
-    def setCrossFadeDuration(self, param):
-        self.config["crossFade"] = self.isValid(param, "Crossfade")
-        pass
-    
-    def initialize(self):
-        # Check if Folder Exists
-        self.xtl.createDir(self.fInput)
-        self.xtl.createDir(self.fOutput)
-        self.xtl.createDir(self.fTrimmed)
     

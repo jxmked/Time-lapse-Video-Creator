@@ -1,4 +1,4 @@
-#!/user/bin/env python3
+#!/usr/bin/env python3
 
 from sys import path
 from os import path as opath
@@ -137,6 +137,19 @@ class Main:
         print("-~" * 10, end="-\n")
         exit(0)
     
+    def argAudioVideoMerge(self):
+        self.isAlone = True
+        self.timer.start()
+        
+        self.V.argAudioVideoMerge()
+        
+        self.timer.end()
+        
+        print("~-" * 10, end="~\n")
+        self.timer.printLapse("Finished")
+        print("-~" * 10, end="-\n")
+        exit(0)
+    
     def arg_initClean(self):
         self.cleanUp()
         exit(0)
@@ -254,9 +267,18 @@ FLAGS = {
         "description" : "Overwrite all existing files with new one. Old files will be replace by new generated files."
     },
     
-    "-mergeAudio" : {
+    "-mergeA" : {
         "func" : obj.startMergeAudio,
         "description" : "Merge all audio files from input folders."
+    },
+    
+    "-mergeAV" : {
+        "func" : obj.argAudioVideoMerge,
+        "description" : "Merge `ReadyToMergeWithVideo.wav` and `merge.mp4` if they exists."
+    },
+    "-mergeVA" : {
+        "func" : obj.argAudioVideoMerge,
+        "description" : "Merge `ReadyToMergeWithVideo.wav` and `merge.mp4` if they exists."
     },
     
     "-start" : {
