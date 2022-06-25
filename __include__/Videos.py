@@ -11,8 +11,8 @@ class Videos:
     
     def __init__(self):
         self.fInput = "Video In"
-        self.fDuplicatedRemoved = "Video Duplicated Frame Removed"
-        self.fOutput = "Resource Out"
+        self.fDuplicatedRemoved = "_Video Duplicated Frame Removed"
+        self.fOutput = ""
         self.xtl = {}
         self.execute = {}
         self.mergedFilename = "merge.mp4"

@@ -7,13 +7,14 @@ class Audio:
     config = {
         "fadeIn" : 5,
         "fadeOut" : 5,
-        "crossFade" : 10
+        "crossFade" : 10,
+        "offDb" : "-30dB" # The Higher, the More Louder it will trim
     }
     
     def __init__(self):
         self.fInput = "Audio In"
-        self.fTrimmed = "Audio Ready File"
-        self.fOutput = "Resource Out"
+        self.fTrimmed = "_Audio Ready File"
+        self.fOutput = ""
         self.xtl = {}
         self.execute = {}
         self.validFormats = ["mp3", "wav", "aac", "ogg", "wma", "flac"]
@@ -34,54 +35,65 @@ class Audio:
             print("No Available Audio to Trim.\nExit...")
             exit(0)
         
+        fformat = ".wav"
+        
         for file in files:
             tmp = self.xtl.getTmpFname()
-            tmp = self.xtl.joinPath(self.fInput, tmp)
-            tmp += ".%s" % self.xtl.getExt(file)
             
-            self.xtl.rename(file, tmp)
+            inTmp = self.xtl.joinPath(self.fInput, "%s.%s" % (tmp, self.xtl.getExt(file)))
+            outTmp = self.xtl.joinPath(self.fTrimmed, "%s%s" % (tmp, fformat))
+            self.xtl.rename(file, inTmp)
             
             try:
+                print("--" * 20)
+                print("Read Audio File: %s" % file)
+                print("--" * 20)
                 self.execute([
-                    ("-i '%s'" % tmp), # Input file
-                    "-acodec pcm_s16le", # Audio Codec
+                    ("-i '%s'" % inTmp), # Input file
                     
-                    #"-ar 41000", # Bitrate
+                    "-acodec pcm_s16le", # Audio Codec
                     
                     "-vn -sn", # Disable Video and Subtitle
                     
-                    # Set Filter| Trim Both end when Silence
-                    "-af 'silenceremove=start_periods=1:start_silence=0.1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_silence=0.1:start_threshold=-50dB,areverse'",
+                    # Set Filter| Trim Silence for both end
+                    ("-af 'silenceremove=start_periods=1:start_silence=0.1:start_threshold=%s,areverse," % self.config['offDb'])
+                       + ("silenceremove=start_periods=1:start_silence=0.1:start_threshold=%s,areverse'" % self.config['offDb']),
                     
                     # Output
-                    ("'%s.wav'" % self.xtl.joinPath(self.fTrimmed, self.xtl.filename(tmp)))
+                    ("'%s'" % outTmp)
                 ])
-                
-                self.xtl.rename(self.xtl.joinPath(self.fTrimmed, "%s.wav" % self.xtl.filename(tmp)), self.xtl.joinPath(self.fTrimmed, "%s.wav" % self.xtl.filename(file)))
             except Exception as err:
                 raise Exception(err)
             finally:
-                self.xtl.rename(tmp, file)
-        
+                self.xtl.rename(inTmp, file)
+                self.xtl.rename(outTmp, self.xtl.joinPath(self.fTrimmed, "%s%s" % (self.xtl.filename(file), fformat)))
+            
         if len(files) == 1:
             # Since, we have single file...
             
-            x = self.xtl.joinPath(self.fTrimmed, ("%s.wav" % self.xtl.filename(files[0])))
+            x = self.xtl.joinPath(self.fTrimmed, "%s%s" % (self.xtl.filename(files[0]), fformat))
             y = self.xtl.joinPath(self.fOutput, "merge.wav")
+            
             self.xtl.copyFile(x, y)
             return 0
         
         # For morethan 1 audio file
         toMerge = {} # To put back audio files previous name
         inp = [] # Input file
+        
+        # Audio file arrangement are also depends of its filename
+        files.sort()
+        
         for file in files:
             tmp = self.xtl.getTmpFname()
             tmp = self.xtl.joinPath(self.fTrimmed, tmp)
             tmp += ".%s" % self.xtl.getExt(file)
             
             x = self.xtl.joinPath(self.fTrimmed, self.xtl.filename(file))
+            x += fformat
             
-            self.xtl.rename(x + ".wav", tmp)
+            self.xtl.rename(x, tmp)
+            
             toMerge[tmp] = x
             
             inp.append("-i '%s'" % tmp)
@@ -111,7 +123,7 @@ class Audio:
         fpath = self.xtl.joinPath(self.fOutput, fname)
         
         if not self.xtl.fileExists(fpath):
-            raise Exception("Audio File %s does not exists" % fpath)
+            raise Exception("Audio file %s does not exists" % fpath)
         
         self.aLen = self.xtl.getAudioLength(fpath)
         
@@ -119,7 +131,16 @@ class Audio:
             "-i '%s'" % fpath,
             
             # Set Fading Filter
-            "-af 'afade=t=in:st=0:d={},afade=t=out:st={}:d={}'".format(self.config["fadeIn"], self.aLen - self.config["fadeOut"], self.config["fadeOut"]),
+            "-af 'afade=t=in:st=0:d={},afade=t=out:st={}:d={}'".format(
+                self.config["fadeIn"], 
+                self.aLen - self.config["fadeOut"], 
+                self.config["fadeOut"]
+            ),
+            # Codec
+            "-acodec pcm_s16le",
+                
+            # Hz
+            "-ar 44100",
             
             "-vn -sn", # Disable Video and Subtitle
             
@@ -128,6 +149,15 @@ class Audio:
     
     
     # Custom parameters
+    def setTrimSE(self, param):
+        try:
+            if int(param) >= 0:
+                raise ("")
+            
+            self.config['offDb'] = ("%sdB" % param)
+        except:
+            raise Exception("trimSE required a negative integer.")
+    
     def fading(self, param):
         self.config['fadeOut'] = self.isValid(param, "Fade")
         self.config['fadeIn'] = self.isValid(param, "Fade")

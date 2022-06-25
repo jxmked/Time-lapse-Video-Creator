@@ -24,7 +24,7 @@ class Main:
     toClean = False
     
     def __init__(self):
-        self.rscOut = "Resource Out"
+        self.rscOut = "_Resource Out"
         self.V = Videos()
         self.A = Audio()
         self.FMG = fmpg()
@@ -104,9 +104,6 @@ class Main:
     def fading(self, param):
         self.V.fading(param)
         self.A.fading(param)
-    
-    def merge(self):
-        pass
     
     def setFadeOut(self, param):
         self.V.fadeOut(param)
@@ -277,6 +274,10 @@ FLAGS = {
     "-aFadeOut:" : {
         "func" : obj.A.fadeOut,
         "description" : "Set custom fade-out duration in Audio"
+    },
+    "-atrimSE:" : {
+        "func" : obj.A.setTrimSE,
+        "description" : "Set custom decibels (dB) to trim both end of an audio file."
     },
     
     "-overwrite" : {
