@@ -35,6 +35,12 @@ ___I'm still working on detailed instruction___
 > Note: May overheat your device. 
 > Make sure that input folders (`Audio In` & `Video In`) is not empty.
 
+### Example Compiled Video
+
+- The creation of Time-lapse-Video-Creator 
+  - [YouTube - Writing Python using Mobile Phone With Lo-Fi (Timelapse)](https://youtu.be/UhjoBfyIFiE)
+
+
 ----
 
 ****Enjoy****
