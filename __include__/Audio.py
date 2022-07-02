@@ -173,7 +173,7 @@ class Audio:
         try:
             num = int(num)
         except:
-            raise Exception("%s value must an integer" % t)
+            raise Exception("the value %s must be an integer" % t)
             
         if num >= 1 and num <= 20:
             return num
