@@ -1,0 +1,27 @@
+{
+    "video" : {
+        "input" : "Video In",
+        "valid_formats" : [".mp4", ".avi", ".mov", ".flv"],
+        "compression" : {
+            "codec" : "libx264",
+            "format" : "mp4"
+        }
+    },
+    "audio" : {
+        "input" : "Audio In",
+        "valid_formats" : [".mp3", ".flac", ".ogg", ".wav"],
+        "compression" : {
+            "codec" : "libx264",
+            "format" : "mp3"
+        }
+    },
+    "directories" : {
+        "audio_in" : "Audio In",
+        "video_in" : "Video In",
+        
+        "resources" : "__Resources__",
+        "temp" : "__includes__/temp",
+        "assets" : "__includes__/assets"
+        
+    }
+}
