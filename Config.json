@@ -20,7 +20,6 @@
         "video_in" : "Video In",
         
         "resources" : "__Resources__",
-        "temp" : "__includes__/temp",
         "assets" : "__includes__/assets"
         
     }

@@ -20,7 +20,6 @@ class Config:
             return None
         
         self.__getJson()
-        
         self.__createDirectories()
     
     def getMyConfig(self, obj):
