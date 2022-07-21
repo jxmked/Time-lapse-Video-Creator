@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# -*- coding UTF-8 -*-
 
 
 # Import Functions
@@ -206,6 +206,8 @@ class Video:
                 "execute" : 0
             })
             
+            # Merge Audio And Video
+            
         except BaseException as be:
             # For debug only
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -227,7 +229,8 @@ class Video:
             "-c:v '%s'" % conf.get("video_codec", "copy"),
             "-c:a '%s'" % conf.get("audio_codec", "aac"),
             "-q:v 0",
-            "-filter_complex '%s'" % conf.get("filter_complex", ""),
+            "-map 0:v"
+            "-vf 'setpts=%s*PTS'" % conf.get("multiplier", "0.5"),
             "-r '%s'" % conf.get("video_framerate", "30"),
             "-f '%s'" % conf.get("video_format", "mp4"),
             "-preset '%s'" % conf.get("preset", "medium"),

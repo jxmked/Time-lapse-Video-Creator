@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding UTF-8 -*-
 
 # Require `sox` package from terminal
 # 'apt install sox -y`

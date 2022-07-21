@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# -*- coding UTF-8 -*-
 
 from os import system as cmd
 from __includes__.config import Config
@@ -96,24 +96,19 @@ class Command:
         
         query = " ".join(arr)
         
+        print()
+        print("-+" * 10, end="-\n")
         if self.title:
-            print()
-            print("-+" * 10, end="-\n")
             print("Name: %s" % self.title)
-            
             self.title = ""
-            
             print("--" * 10)
-        else:
-            print("-+" * 10, end="-\n")
         
         print(query)
         print("-+" * 10, end="-\n")
         
-        
         res = (cmd(query) if run else 0)
         
-        if res is 0 and run is True:
+        if res == 0 and run == True:
             state = "success"
         elif run is False:
             state = "failed"
