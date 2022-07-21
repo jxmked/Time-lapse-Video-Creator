@@ -55,8 +55,12 @@ class Notification:
             "error" : self.bundles[selected]["error"]
         }
         
-        if self.__isInitiated and osName not in self.ENVs:
-            self.addLog("Already initiated or system environment is not supported", "error")
+        if osName not in self.ENVs:
+            self.addLog("System environment is not supported", "error")
+            return None
+
+        if self.__isInitiated:
+            self.addLog("Already initiated", "log")
             return None
         
         self.objName = self.__class__.__name__
@@ -69,42 +73,24 @@ class Notification:
         createDir(self.path)
         
         # Create Object Self Base Directory
-        self.createDirectories()
+        self.__createDirectories()
         
         # Check in-use assets is existing
-        self.chkAudio()
+        self.__chkAudio()
         
         # Check if `sox.play` is available
-        self.chkPackage()
+        self.__chkPackage()
         
         self.__isInitiated = True
     
-    def chkPackage(self):
-        
-        # Print it into black hole. Hahaha
-        out = system("play --version > /dev/null")
-        
-        # `is not` only works for variables
-        if out != 0:
-            print("`sox` package is not available.")
-            self.addLog("sox package is not installed", "error")
-            self.__status = "error"
-        
-    def mute(self):
-        self.ps = True
-    
-    def createDirectories(self):
+    # Init system
+    def __createDirectories(self):
         for k, v in self.subFolders.items():
             a = join(self.path, v)
             createDir(a)
     
-    def addLog(self, message, status):
-        self.logs.append({
-            "message" : message,
-            "status" : status
-        })
-    
-    def chkAudio(self):
+    # Check systen
+    def __chkAudio(self):
         
         arr = []
         for index in self.sounds:
@@ -124,8 +110,20 @@ class Notification:
             
             print("\nCannot start.")
             exit(1)
-            
-    def call(self, audio):
+    
+    def __chkPackage(self):
+        
+        # Print it into black hole. Hahaha
+        out = system("play --version > /dev/null")
+        
+        # `is not` only works for variables
+        if out != 0:
+            print("`sox` package is not available.")
+            self.addLog("sox package is not installed", "error")
+            self.__status = "error"
+        
+    # Create query and evaluate
+    def __call(self, audio):
         # Package, No Output
         cmd = ["play", "-q"]
         
@@ -134,12 +132,25 @@ class Notification:
         if not self.ps:
             system(" ".join(cmd))
     
+    # Play sound. Notification Trigger
     def error(self):
         if self.__status == "ok" and osName in self.ENVs:
-            self.call(self.sounds["error"])
+            self.__call(self.sounds["error"])
         
     def success(self):
         if self.__status == "ok" and osName in self.ENVs:
-            self.call(self.sounds["success"])
-        
+            self.__call(self.sounds["success"])
+    
+    # Mute 
+    def mute(self):
+        self.ps = True
+    # Loggings
+    def addLog(self, message, status):
+        self.logs.append({
+            "message" : message,
+            "status" : status
+        })
+    
+    def getLogs(self):
+        return self.logs
     

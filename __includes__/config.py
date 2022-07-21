@@ -3,7 +3,7 @@
 
 # Configuration JSON file Parser
 
-from json import loads, dumps
+from json import loads, dumps, JSONDecodeError
 import os
 
 
