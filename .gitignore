@@ -5,3 +5,4 @@ Audio In/*
 Video In/*
 *.pyc
 __includes__/assets/Notification/media/.nomedia
+balancer.py

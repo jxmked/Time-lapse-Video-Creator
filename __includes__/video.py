@@ -19,6 +19,7 @@ nf = Notification()
 
 import json
 import sys
+import os
 
 class Video:
     __root__ = os.path.dirname(__file__)
@@ -213,7 +214,7 @@ class Video:
             exit(0)
     
     
-    def finalMerge(self, video, audio, output conf=None):
+    def finalMerge(self, video, audio, output, conf=None):
         assert isinstance(video, VF), "Input video must be an instance of VideoFile"
         #assert isinstance(audio, AF), "Input audio must be an instance of AudioFile"
         
