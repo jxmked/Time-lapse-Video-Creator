@@ -47,7 +47,9 @@ class Notification:
     # nt == Windows
     ENVs = ["posix"]
     logs = []
-
+    
+    driver = object
+    
     def __init__(self, selected=1):
         
         self.sounds = {
@@ -55,10 +57,16 @@ class Notification:
             "error" : self.bundles[selected]["error"]
         }
         
-        if osName not in self.ENVs:
-            self.addLog("System environment is not supported", "error")
-            return None
-
+        # Python version 3.10 and after #
+        # Import What we need 
+        match osName:
+            case "posix":
+                from __includes__.assets.Notification.drivers.PosixSoundPlayer import PosixSoundPlayer
+                self.driver = PosixSoundPlayer()
+            case default:
+                self.addLog("System environment is not supported", "error")
+                return None
+        
         if self.__isInitiated:
             self.addLog("Already initiated", "log")
             return None
