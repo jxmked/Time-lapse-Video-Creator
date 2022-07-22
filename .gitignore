@@ -1,8 +1,7 @@
 
-__includes__/assets/.nomedia
+.nomedia
 *.txt
-Audio In/*
-Video In/*
-*.pyc
-__includes__/assets/Notification/media/.nomedia
+Audio In
+Video In
 balancer.py
+__pycache__/
