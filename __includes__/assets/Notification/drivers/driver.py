@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding UTF-8 -*-
 
+# @Package Name TLVC (Time Lapse Video Creator)
+
 # I don't know if this is driver or not
 # I just think so that this is a driver. Hahaha
 
@@ -25,7 +27,7 @@ class Driver(object):
             self.addLog("No valid exit code to look up from subclass", "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("No valid exit code to look up from subclass")
         pass
     
     def setPackage(self, name):
@@ -37,14 +39,14 @@ class Driver(object):
             self.addLog("Package name should be a valid string", "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("Package name should be a valid string")
         
         # Testing...
         if system("%s &> /dev/null" % name) not in self.validExitCode:
             self.addLog("Package name does not recognize by your system", "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("Package name does not recognize by your system.\nPackage Name: %s" % name)
         
         # Package Name or Sub Package Name
         self.__pkgName = name
@@ -56,13 +58,13 @@ class Driver(object):
             self.addLog("audioList cannot be an empty list/array", "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("audioList cannot be an empty list/array")
         
         if not isinstance(soundList, list):
             self.addLog("audioList only accepts an list/array. '%s' given" % type(soundList), "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("audioList only accepts an list/array. '%s' given" % type(soundList))
         
         notExisting = []
         
@@ -76,15 +78,14 @@ class Driver(object):
             self.addLog("Audio file does not exists.\n    %s" % ("\n    ".join(notExisting)), "error")
             
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("Audio file does not exists. [%s]" % (", ".join(notExisting)))
         
     def sound(self, soundPath, args=None):
         if soundPath not in self.__SoundList:
             self.addLog("File '%s' not exists on sound list" % soundPath, "error")
-            return
-        
+            
             if not self.__noRaise:
-                raise Exception("Error from %s" % __file__)
+                raise Exception("File '%s' not exists on sound list" % soundPath)
         
         cmd = [self.__pkgName, soundPath]
         

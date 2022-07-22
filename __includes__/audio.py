@@ -4,27 +4,17 @@
 import os
 
 # Import Functions
+from __includes__.Controller import Controller
 from __includes__.helpers import *
-from __includes__.notification import Notification
-from __includes__.failsafe import Failsafe
-from __includes__.command import Command
-from __includes__.timer import Timer
 
-# Flush Buffered
-from functools import partial as fPartial
-print = fPartial(print, flush=True)
-
-nf = Notification()
-#nf.mute()
-
-class Audio:
+class Audio(Controller):
     def __init__(self):
         self.audioPath = "Audio In"
         self.validTypes = ["wav", "mp3", "ogg", "wma", "aac"]
-        
+        super().__init__(self.__class__.__name__)
         if not os.path.isdir(self.audioPath):
             createDir(self.audioPath)
-            nf.error()
+            self.notif.error()
             raise Exception("%s looks empty" % self.audioPath)
         
         self.files = getFiles(self.audioPath, self.validTypes)
@@ -47,19 +37,12 @@ class Audio:
             "shortcut" : 1
         }
         
-        self.fs = Failsafe(self.__class__.__name__)
-        
-        self.cmd = Command()
-        self.execute = self.cmd.execute
-        
-        self.timers = {}
-        
     def prepareFiles(self, files):
         
         l = len(files)
         
         if l == 0:
-            nf.error()
+            self.notif.error()
             print("No Audio Files to merge")
             exit(0)
         
