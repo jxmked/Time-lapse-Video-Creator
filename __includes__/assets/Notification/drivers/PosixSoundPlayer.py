@@ -20,6 +20,8 @@ class PosixSoundPlayer(Driver):
         #self.noRaise()
         
         self.setPackage("play")
-        
+
+    def __playSound(self, sys):
+        sys.system()
     def playSound(self, path):
         self.sound(path, "-q")

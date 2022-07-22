@@ -30,7 +30,7 @@ class Driver(object):
                 raise Exception("No valid exit code to look up from subclass")
         pass
     
-    def setPackage(self, name):
+    def setPackage(self, name, sys=None):
         """
         This would get package name from sub class.
         A package name should be able to play sound from CLI
