@@ -8,7 +8,14 @@ from __includes__.Controller import Controller
 from __includes__.helpers import *
 
 class Audio(Controller):
+    directories = {
+        "input" : "Audio In",
+        "output" : "__Resource__"
+    }
     def __init__(self):
+        
+        
+        
         self.audioPath = "Audio In"
         self.validTypes = ["wav", "mp3", "ogg", "wma", "aac"]
         super().__init__(self.__class__.__name__)
