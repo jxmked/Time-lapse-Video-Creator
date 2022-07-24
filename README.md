@@ -6,6 +6,14 @@ ___Written in Python with ffmpeg___
 
 ___This is under development version___
 
+
+> Hi, this branch of Time Lapse Video Creator is Under Development.
+> I'm trying to make more modular so they can be easily fix and more understandable.
+> And also giving my hand a glimpse of OOP with Python.
+> It is a something unique than I thought so it may took to long to finish.
+> - The Developer (Jovan)
+
+
 ### Requirements
 
 > If the environment is not in Termux, please install manually these packages/libraries...
