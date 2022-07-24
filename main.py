@@ -16,24 +16,19 @@ from __includes__.Controller import Controller
 
 class Main(Config):
     
-    __root__ : str = dirname(__file__)
-    _logs : list = []
+    __root__ = dirname(__file__)
+    _logs = []
     
     def __init__(self) -> None:
         register(self.__printLogs)
         super().__init__(True)
         
         # Extend Controller
-        self.CTRL : Controller = Controller(self)
+        self.CTRL = Controller(self)
         
         
        # print(self.fuck)
-    def writeLog(self, 
-            objName : str, 
-            msg : str, 
-            state : str, 
-            EE : str
-        ) -> None:
+    def writeLog(self, objName, msg, state, EE) -> None:
         
         self._logs.append({
             "message" : msg,
