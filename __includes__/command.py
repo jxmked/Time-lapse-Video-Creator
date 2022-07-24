@@ -26,6 +26,11 @@ class Command:
         }
     }
     
+    """Logging Level -> ffmpeg -loglevel %
+    trace, debug, verbose, info, warning, error, fatal, panic
+    """
+    
+    
     inputList = []
     output = ""
     title = ""

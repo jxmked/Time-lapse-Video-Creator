@@ -4,4 +4,5 @@
 Audio In
 Video In
 balancer.py
-__pycache__/
+__pycache__
+.mypy_cache

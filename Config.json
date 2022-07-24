@@ -1,26 +1,68 @@
 {
-    "video" : {
-        "input" : "Video In",
+    "Video" : {
         "valid_formats" : [".mp4", ".avi", ".mov", ".flv"],
         "compression" : {
             "codec" : "libx264",
-            "format" : "mp4"
+            "format" : "mp4",
+            "framerate" : "30",
+            "resolution" : ""
+        },
+        "system_directories" : {
+            "temp" : "temp"
+        },
+        "directories" : {
+            "input" : "Video In",
+            "temp" : "temp",
+            "resource" : "__Resource__"
         }
     },
-    "audio" : {
-        "input" : "Audio In",
+    "Audio" : {
         "valid_formats" : [".mp3", ".flac", ".ogg", ".wav"],
         "compression" : {
-            "codec" : "libx264",
-            "format" : "mp3"
+            "codec" : "aac",
+            "format" : "aac"
+        },
+        "system_directories" : {
+            "temp" : "temp"
+        },
+        "directories" : {
+            "input" : "Audio In",
+            "resource" : "__Resource__"
         }
     },
-    "directories" : {
-        "audio_in" : "Audio In",
-        "video_in" : "Video In",
-        
-        "resources" : "__Resources__",
-        "assets" : "__includes__/assets"
-        
+    "Notification" : {
+        "mode" : "on",
+        "directories" : {
+            "audio_path" : "media"
+        },
+        "system_directories" : {
+            "temp" : "temp"
+        }
+    },
+    "Command" : {
+        "priority" : {
+            "mode" : false,
+            "level" : "-20"
+        },
+        "set_threads" : {
+            "mode" : false,
+            "count" : 12 
+        },
+        "overwrite" : true,
+        "benchmark" : {
+            "mode" : false,
+            "level" : "basic"
+        },
+        "logging" : {
+            "mode" : false,
+            "level" : "debug"
+        },
+        "directories" : {},
+        "system_directories" : {
+            "temp" : "temp"
+        }
+    },
+    "setting" : {
+        "env_mode" : "development"
     }
 }
