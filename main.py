@@ -12,24 +12,36 @@ from os.path import dirname
 from atexit import register
 
 from __includes__.config import Config
-from __includes__.Controller import Controller
+from __includes__.StorageManager import StorageManager
 
-class Main(Config):
+#from Controller import Controller
+
+class Main(Config, StorageManager):
     
     __root__ = dirname(__file__)
     _logs = []
+    SYS_ENV = "development"
     
     def __init__(self) -> None:
+        # Call before exiting
         register(self.__printLogs)
-        super().__init__(True)
         
-        # Extend Controller
-        self.CTRL = Controller(self)
+        Config.__init__(self)
+        StorageManager.__init__(self)
+        
+        # Storage Manager Methods
+        self.setObjectName("Main")
+        self.createSystemDirectories()
+        self.createDirectories()
         
         
-       # print(self.fuck)
-    def writeLog(self, objName, msg, state, EE) -> None:
-        
+        print(self.sys_directories)
+        print(self.directories)
+    
+    def writeLog(self, objName, msg, state, EE=None) -> None:
+        if not EE:
+            EE = "Null"
+            
         self._logs.append({
             "message" : msg,
             "state" : state,

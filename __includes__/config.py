@@ -5,18 +5,20 @@
 #
 # Configuration JSON file Parser
 
-from json import loads, JSONDecodeError
 from os.path import join
+from json import loads, JSONDecodeError
 
-class Config(object):
+class Config:
     
-    configName : str = "Config.json"
+    configName = "Config.json"
     
     def __init__(self, ncfg=False) -> None:
         
         conf = {}
         self.setting = {}
         self.myConfig = {}
+        self.directories = {}
+        self.sys_directories = {}
         
         try:
             # Load JSON Text from file
@@ -32,9 +34,10 @@ class Config(object):
                 if not ncfg:
                     # Object Properties
                     self.myConfig = conf.get(self.__class__.__name__)
-                    
-                # We're good
-                return None
+                    self.directories = self.myConfig.get("directories")
+                    self.sys_directories = self.myConfig.get("system_directories")
+                
+                return self
             
         
         except JSONDecodeError as EE:

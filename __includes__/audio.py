@@ -1,10 +1,14 @@
 #!/usr/bin/bash python3
 # -*- coding UTF-8 -*-
+# 
+# @Package Name TLVC (Time Lapse Video Creator)
+# 
+# Main Audio Handler
 
 import os
 
 # Import Functions
-from __includes__.Controller import Controller
+from Controller import Controller
 from __includes__.helpers import *
 
 class Audio(Controller):
@@ -13,7 +17,6 @@ class Audio(Controller):
         "output" : "__Resource__"
     }
     def __init__(self):
-        
         
         
         self.audioPath = "Audio In"

@@ -12,7 +12,7 @@ from __includes__.timer import Timer as T
 from __includes__.StorageManager import StorageManager
 #from __includes__.audio import Audio
 
-class Controller(StorageManager):
+class Controller(Command):
     cmd : Command = Command()
     execute = cmd.execute
     

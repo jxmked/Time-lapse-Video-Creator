@@ -8,29 +8,44 @@ from os.path import isfile, join, isdir
 
 class StorageManager(object):
     
-    
-    
-    ## Directories should have
-    # input -> input
-    # resources output -> resource
-    
-    
+    directories = {}
+    __name__ = None
     
     def __init__(self):
+        pass
+        #return self
+    
+    def setObjectName(self, name):
+        self.__name__ = name
+    
+    def createSystemDirectories(self):
+        assets_directory = join("__includes__", "assets", self.__name__)
         
-        # Path to Accessible Directory
-        for k, v in self.myConfig.get("directories").item():
+        # Path to System Directories
+        for k, v in self.sys_directories.items():
             # This should be a directory and must be existing
-            p = join(self.__root__, self.__class__.__name__, v)
-            self.createDir(p)
+            p = join(self.__root__, assets_directory, v)
+            self.__create_directory(p)
+            self.sys_directories[k] = p
         
+    def createDirectories(self):
+        # Path to Accessible Directory
+        for k, v in self.directories.items():
+            # This should be a directory and must be existing
+            p = join(self.__root__, v)
+            
+            self.__create_directory(p)
+            self.sys_directories[k] = p
         
-    def createDirs(self, p):
+    def __create_directory(self, p):
         if not isdir(p) and not isfile(p):
-            self.directories[k] = p
             makedirs(p)
             
-        if isfile(p):
-            raise Exception('{p} is already existing but as a file.')
+        elif isfile(p) and self.SYS_ENV in ["development", "debug"]:
+            self.writeLog("StorageManager", '{p} does exists and it is a file', "error")
+            
+            if self.SYS_ENV == "debug":
+                raise Exception('{p} is already existing but as a file.')
+            
         
     
