@@ -12,7 +12,6 @@
         },
         "directories" : {
             "input" : "Video In",
-            "temp" : "temp",
             "resource" : "__Resource__"
         }
     },
@@ -32,11 +31,10 @@
     },
     "Notification" : {
         "mode" : "on",
-        "directories" : {
-            "audio_path" : "media"
-        },
+        "directories" : {},
         "system_directories" : {
-            "temp" : "temp"
+            "temp" : "temp",
+            "media" : "Media"
         }
     },
     "Command" : {
@@ -57,6 +55,12 @@
             "mode" : false,
             "level" : "debug"
         },
+        "directories" : {},
+        "system_directories" : {
+            "temp" : "temp"
+        }
+    },
+    "Main" : {
         "directories" : {},
         "system_directories" : {
             "temp" : "temp"

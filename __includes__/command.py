@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding UTF-8 -*-
+# 
+# @Package Name TLVC (Time Lapse Video Creator)
+#
+# Execute commands
 
-from os import system as cmd
+from os import system
 from __includes__.config import Config
 
-class Command:
+class Command(Config):
     
     config = {
         "priority" : {
@@ -37,6 +41,8 @@ class Command:
     cmdLog = [] # args, state
     
     def __init__(self):
+        super().__init__(self)
+        
         pass
     def getLogs(self):
         return self.cmdLog
@@ -111,7 +117,7 @@ class Command:
         print(query)
         print("-+" * 10, end="-\n")
         
-        res = (cmd(query) if run else 0)
+        res = (system(query) if run else 0)
         
         if res == 0 and run == True:
             state = "success"
