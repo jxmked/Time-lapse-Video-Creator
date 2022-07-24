@@ -19,6 +19,7 @@ class Audio(Controller):
         self.audioPath = "Audio In"
         self.validTypes = ["wav", "mp3", "ogg", "wma", "aac"]
         super().__init__(self.__class__.__name__)
+        
         if not os.path.isdir(self.audioPath):
             createDir(self.audioPath)
             self.notif.error()

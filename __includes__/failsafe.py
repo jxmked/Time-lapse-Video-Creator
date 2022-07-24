@@ -8,7 +8,7 @@ from atexit import register as aeRegister
 
 """
 This Object is Self Dependency So Running It Directly is Possible.
- Just for your needs. Hahaha
+ Just for your needs.
 """
 
 from __includes__.helpers import slugify, getFiles, createDir
@@ -151,8 +151,6 @@ class Failsafe:
             # Temp Names
             _absIn = join(datas["input"], key)
             _absOut = join(datas["output"], key)
-            
-            hasError = False
             
             try:
                 

@@ -31,7 +31,7 @@
         }
     },
     "Notification" : {
-        "mode" : "on"
+        "mode" : "on",
         "directories" : {
             "audio_path" : "media"
         },
@@ -63,6 +63,6 @@
         }
     },
     "setting" : {
-        "env_mode" : "development",
+        "env_mode" : "development"
     }
 }

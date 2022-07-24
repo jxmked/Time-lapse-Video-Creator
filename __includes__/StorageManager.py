@@ -3,7 +3,8 @@
 
 # @Package Name TLVC (Time Lapse Video Creator)
 
-from os.path import isfile, join, isdir, makedirs
+from os import makedirs
+from os.path import isfile, join, isdir
 
 class StorageManager(object):
     
@@ -13,7 +14,7 @@ class StorageManager(object):
     # input -> input
     # resources output -> resource
     
-    directories = {}
+    
     
     def __init__(self):
         
@@ -23,8 +24,8 @@ class StorageManager(object):
             p = join(self.__root__, self.__class__.__name__, v)
             self.createDir(p)
         
-    
-    def createDir(self, p):
+        
+    def createDirs(self, p):
         if not isdir(p) and not isfile(p):
             self.directories[k] = p
             makedirs(p)
