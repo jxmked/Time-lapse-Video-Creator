@@ -13,7 +13,6 @@ class StorageManager(object):
     
     def __init__(self):
         pass
-        #return self
     
     def setObjectName(self, name):
         self.__name__ = name
@@ -25,7 +24,7 @@ class StorageManager(object):
         for k, v in self.sys_directories.items():
             # This should be a directory and must be existing
             p = join(self.__root__, assets_directory, v)
-            self.__create_directory(p)
+            self.__create_directory__(p)
             self.sys_directories[k] = p
         
     def createDirectories(self):
@@ -34,17 +33,17 @@ class StorageManager(object):
             # This should be a directory and must be existing
             p = join(self.__root__, v)
             
-            self.__create_directory(p)
+            self.__create_directory__(p)
             self.sys_directories[k] = p
         
-    def __create_directory(self, p):
+    def __create_directory__(self, p):
         if not isdir(p) and not isfile(p):
             makedirs(p)
             
-        elif isfile(p) and self.SYS_ENV in ["development", "debug"]:
+        elif isfile(p) and self.SYS_ENV in ["development", "debug", "logging"]:
             self.writeLog("StorageManager", '{p} does exists and it is a file', "error")
             
-            if self.SYS_ENV == "debug":
+            if self.SYS_ENV == "development":
                 raise Exception('{p} is already existing but as a file.')
             
         

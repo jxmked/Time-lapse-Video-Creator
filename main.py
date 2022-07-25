@@ -11,22 +11,21 @@ from argparse import ArgumentParser as AP
 from os.path import dirname
 from atexit import register
 
+from __includes__.Logging import Logging as LG
 from __includes__.config import Config
 from __includes__.StorageManager import StorageManager
+from Controller import Controller
 
-#from Controller import Controller
-
-class Main(Config, StorageManager):
+class Main(Config, StorageManager, LG):
     
     __root__ = dirname(__file__)
-    _logs = []
+    
     SYS_ENV = "development"
     
     def __init__(self) -> None:
-        # Call before exiting
-        register(self.__printLogs)
+        LG.__init__(self)
         
-        Config.__init__(self)
+        Config.__init__(self, "Main")
         StorageManager.__init__(self)
         
         # Storage Manager Methods
@@ -35,36 +34,10 @@ class Main(Config, StorageManager):
         self.createDirectories()
         
         
-        print(self.sys_directories)
-        print(self.directories)
-    
-    def writeLog(self, objName, msg, state, EE=None) -> None:
-        if not EE:
-            EE = "Null"
-            
-        self._logs.append({
-            "message" : msg,
-            "state" : state,
-            "exception" : EE,
-            "name" : objName
-        })
-    
-    def __printLogs(self) -> None:
-        if len(self._logs) < 1:
-            return
+        self.CTRL = Controller.__init__(self)
+        self.writeLog("Main", "Hey")
+        register(self.printLogs)
         
-        print("\nError caught during runtime.")
-        print("-+" * 9, end="-\n")
-        
-        for k, v in enumerate(self._logs):
-            print("%s: %s" % (v["name"], v["state"]))
-            print("Message: %s" % v["message"])
-            print("Caught: %s" % v["exception"])
-            
-            print("-+" * 9, end="-\n")
-        
-    
-
 
 if __name__ == '__main__':
     Main()

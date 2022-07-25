@@ -12,7 +12,7 @@ class Config:
     
     configName = "Config.json"
     
-    def __init__(self, ncfg=False) -> None:
+    def __init__(self, name=None, ncfg=False) -> None:
         
         conf = {}
         self.setting = {}
@@ -29,14 +29,17 @@ class Config:
                 
                 # Global Config
                 self.setting = conf.get("setting")
-                    
+                
+                # Set Environment Mode
+                self.SYS_ENV = self.setting.get("env_mode", "production")
+                
                 # Do we have class object config?
                 if not ncfg:
                     # Object Properties
-                    self.myConfig = conf.get(self.__class__.__name__)
+                    self.myConfig = conf.get(name)
                     self.directories = self.myConfig.get("directories")
                     self.sys_directories = self.myConfig.get("system_directories")
-                
+                    
                 return self
             
         
@@ -50,3 +53,5 @@ class Config:
             
         exit("Cannot start.")
     
+    def getConfig(self):
+        return self.myConfig.get("configuration", {})

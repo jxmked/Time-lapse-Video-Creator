@@ -38,22 +38,24 @@
         }
     },
     "Command" : {
-        "priority" : {
-            "mode" : false,
-            "level" : "-20"
-        },
-        "set_threads" : {
-            "mode" : false,
-            "count" : 12 
-        },
-        "overwrite" : true,
-        "benchmark" : {
-            "mode" : false,
-            "level" : "basic"
-        },
-        "logging" : {
-            "mode" : false,
-            "level" : "debug"
+        "configuration" : {
+            "priority" : {
+                "mode" : false,
+                "level" : "-20"
+            },
+            "set_threads" : {
+                "mode" : false,
+                "count" : 12 
+            },
+            "overwrite" : true,
+            "benchmark" : {
+                "mode" : false,
+                "level" : "basic"
+            },
+            "logging" : {
+                "mode" : false,
+                "level" : "debug"
+            }
         },
         "directories" : {},
         "system_directories" : {
