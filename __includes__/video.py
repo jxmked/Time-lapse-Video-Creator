@@ -4,7 +4,7 @@
 
 # Import Functions
 from __includes__.helpers import *
-from __includes__.notification import Notification
+#from __includes__.notification import Notification
 from __includes__.failsafe import Failsafe
 from __includes__.command import Command
 from __includes__.timer import Timer
@@ -14,7 +14,7 @@ from __includes__.video_file import VideoFile as VF
 #from functools import partial as fPartial
 #print = fPartial(print, flush=True)
 
-nf = Notification()
+#nf = Notification()
 #nf.mute()
 
 import json
@@ -22,7 +22,7 @@ import sys
 import os
 
 class Video:
-    __root__ = os.path.dirname(__file__)
+    __root__ = "."#os.path.dirname(__name__)
     def __init__(self):
         
         self.objectName = self.__class__.__name__
@@ -35,7 +35,7 @@ class Video:
         
         if not os.path.isdir(self.videoPath):
             createDir(self.videoPath)
-            nf.error()
+            #nf.error()
             raise Exception("%s looks empty" % self.videoPath)
         createDir(self.processed)
         
@@ -56,7 +56,7 @@ class Video:
         l = len(files)
         
         if l == 0:
-            nf.error()
+            #nf.error()
             print("No Video Files to merge")
             exit(0)
         
@@ -189,8 +189,8 @@ class Video:
                         "video_filter" : vf,
                         
                         # Development
-                        "video_preset" : "ultrafast",
-                        "execute" : 0
+                        "video_preset" : "medium",
+                        "execute" : 1
                     }
                 )
             
@@ -202,8 +202,8 @@ class Video:
                 "title": "Merge (%s) files" % l,
                 
                 # Development
-                "preset" : "ultrafast",
-                "execute" : 0
+                "preset" : "medium",
+                "execute" : 1
             })
             
             # Merge Audio And Video

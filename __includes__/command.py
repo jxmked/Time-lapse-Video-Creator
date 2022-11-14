@@ -41,11 +41,12 @@ class Command(Config):
     cmdLog = [] # args, state
     
     def __init__(self):
-        print(self.config)
-        Config.__init__(self, "Command")
+     #   print(self.config)
+      #  Config.__init__(self, "Command")
        # print(self.config)
-        self.config = self.getConfig()
-        print(self.config)
+     #   self.config = self.getConfig()
+     #   print(self.config)
+        pass
         
     def getLogs(self):
         return self.cmdLog
@@ -129,7 +130,7 @@ class Command(Config):
         else:
             state = "error"
         
-        self.writeLog("Command", "Query: %s" % query, state)
+       # self.writeLog("Command", "Query: %s" % query, state)
         #self.cmdLog.append(( state, query ))
         
         assert res == 0, "\nCurrent Command:\n\t%s" % query

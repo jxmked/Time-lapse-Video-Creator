@@ -7,6 +7,7 @@
 
 from os.path import join
 from json import loads, JSONDecodeError
+from os import environ
 
 class Config:
     
@@ -24,24 +25,19 @@ class Config:
             # Load JSON Text from file
             
             # fopen : method
-            with open(join(self.__root__, self.configName), "r") as fopen:
-                conf = loads(fopen.read())
-                
-                # Global Config
-                self.setting = conf.get("setting")
-                
-                # Set Environment Mode
-                self.SYS_ENV = self.setting.get("env_mode", "production")
-                
-                # Do we have class object config?
-                if not ncfg:
-                    # Object Properties
-                    self.myConfig = conf.get(name)
-                    self.directories = self.myConfig.get("directories")
-                    self.sys_directories = self.myConfig.get("system_directories")
-                    
-                return self
+            if "__tlvc_config" in environ:
+                conf = environ.get("__tlvc_config")
+            else:
+                with open(join(self.__root__, self.configName), "r") as fopen:
+                    conf = loads(fopen.read())
+                    environ["__tlvc_config"] = conf
             
+            self.__parse(conf, {
+                "hasConfig" : ncfg,
+                "name" : name
+            })
+            
+            return self
         
         except JSONDecodeError as EE:
             # Parsing Error
@@ -52,6 +48,20 @@ class Config:
             self.writeLog("Config", "Config file does not exists", "error", EE)
             
         exit("Cannot start.")
+    
+    def __parse(self, data, attr):
+        # Global Config
+        self.setting = data.get("setting")
+        
+        # Set Environment Mode
+        self.SYS_ENV = self.setting.get("env_mode", "production")
+        # Do we have class object config?
+        if not attr.get("hasConfig"):
+            # Object Properties
+            self.myConfig = data.get(attr.get("name"))
+            self.directories = self.myConfig.get("directories")
+            self.sys_directories = self.myConfig.get("system_directories")
+            
     
     def getConfig(self):
         return self.myConfig.get("configuration", {})

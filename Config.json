@@ -29,14 +29,6 @@
             "resource" : "__Resource__"
         }
     },
-    "Notification" : {
-        "mode" : "on",
-        "directories" : {},
-        "system_directories" : {
-            "temp" : "temp",
-            "media" : "Media"
-        }
-    },
     "Command" : {
         "configuration" : {
             "priority" : {

@@ -11,33 +11,37 @@ from argparse import ArgumentParser as AP
 from os.path import dirname
 from atexit import register
 
-from __includes__.Logging import Logging as LG
-from __includes__.config import Config
+#from __includes__.Logging import Logging as LG
+#from __includes__.config import Config
 from __includes__.StorageManager import StorageManager
-from Controller import Controller
+#from Controller import Controller
+from __includes__.video import Video
 
-class Main(Config, StorageManager, LG):
+class Main:
     
     __root__ = dirname(__file__)
     
     SYS_ENV = "development"
     
     def __init__(self) -> None:
-        LG.__init__(self)
+        #LG.__init__(self)
         
-        Config.__init__(self, "Main")
+      #  Config.__init__(self, "Main")
         StorageManager.__init__(self)
         
         # Storage Manager Methods
-        self.setObjectName("Main")
-        self.createSystemDirectories()
-        self.createDirectories()
+     #   self.setObjectName("Main")
+     #   self.createSystemDirectories()
+    #    self.createDirectories()
         
         
-        self.CTRL = Controller.__init__(self)
-        self.writeLog("Main", "Hey")
-        register(self.printLogs)
-        
+     #   self.CTRL = Controller.__init__(self)
+    #    self.writeLog("Main", "Hey")
+     #   register(self.printLogs)
+     
+    vd = Video()
+    vd.prepareFiles(vd.files)
+
 
 if __name__ == '__main__':
     Main()
