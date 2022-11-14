@@ -1,6 +1,5 @@
 .vscode
 .nomedia
-*.txt
 Audio In
 Video In
 balancer.py
