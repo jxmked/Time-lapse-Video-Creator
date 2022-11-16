@@ -9,6 +9,7 @@ from __includes__.failsafe import Failsafe
 from __includes__.command import Command
 from __includes__.timer import Timer
 from __includes__.video_file import VideoFile as VF
+from __includes__.envres import envRes
 
 # Flush Buffered
 #from functools import partial as fPartial
@@ -22,7 +23,9 @@ import sys
 import os
 
 class Video:
+    
     __root__ = "."#os.path.dirname(__name__)
+    
     def __init__(self):
         
         self.objectName = self.__class__.__name__
@@ -37,6 +40,7 @@ class Video:
             createDir(self.videoPath)
             #nf.error()
             raise Exception("%s looks empty" % self.videoPath)
+            
         createDir(self.processed)
         
         self.output = "Output" # Output name
@@ -89,7 +93,7 @@ class Video:
         
         selected = {
             "quality" : "medium",
-            "format" : "ts",
+            "format" : "mp4", # output format
             
             # The slower the better quality
             "preset" : "veryfast" # https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -170,41 +174,45 @@ class Video:
             
             fmerge = []
             for file in vfs:
-                # Using this filters will not get sync with the audio
+                # Using this filters will get out of sync with the audio
+                # So, it is better to not to include audio to the process. (I mean removing it)
                 
                 # https://superuser.com/questions/1706239/using-ffmpeg-mpdecimate-to-get-rid-of-exact-duplicate-frames-i-e-losslessly
                 #vf = "mpdecimate=hi=64*12:lo=64*5:frac=0.33:max=0"
                
-                # https://stackoverflow.com/questions/37088517/remove-sequentially-duplicate-frames-when-using-ffmpeg
+                # https://stackoverflow.com/questions/37088517/remove-sequentially-duplicate-frames-when-using-ffmpeg#answer-52062421
                 #vf = "mpdecimate,setpts=N/FRAME_RATE/TB"
                 vf = "mpdecimate,setpts=N/%s/TB" % file.framerate
                 
                 fmerge.append(file.data["tmp_processed"])
+                args = {
+                    "title": file.filename,
+                    "video_filter": vf
+                }
+                
+                if envRes.get("ENV_MODE") == "dev":
+                    args["preset"] = "medium"
+                    args["execute"] = 1
                 
                 self.rmDuplicatedFrames(
                     file.data["tmp_filename"],
                     file.data["tmp_processed"],
-                    {
-                        "title" : file.filename,
-                        "video_filter" : vf,
-                        
-                        # Development
-                        "video_preset" : "medium",
-                        "execute" : 1
-                    }
+                    args
                 )
             
             ### Video merge ###
             
             fmergeOut = os.path.join(self.processed, "_Raw_merged.mp4")
             
-            self.mergeVideos(fmerge, fmergeOut, { 
-                "title": "Merge (%s) files" % l,
-                
-                # Development
-                "preset" : "medium",
-                "execute" : 1
-            })
+            args = {
+                "title": "Merge (%s) files" % i
+            }
+            
+            if envRes.get("ENV_MODE") == "dev":
+                args["preset"] = "medium"
+                args["execute"] = 1
+            
+            self.mergeVideos(fmerge, fmergeOut, args)
             
             # Merge Audio And Video
             
@@ -238,12 +246,17 @@ class Video:
             # https://superuser.com/questions/908295/ffmpeg-libx264-how-to-specify-a-variable-frame-rate-but-with-a-maximum
             "-vsync vfr",
             "-pix_fmt yuv420p",
-            "-movflags +faststart", # Playable even it is still downloading
+            "-movflags +faststart" # Playable even it is still downloading
         ], conf.get("execute", 1))
         
     def mergeVideos(self, files, o, conf):
         textFile = "__tmf__.txt"
         absPath = os.path.join(self.__root__, textFile)
+        
+        # Write text file contains video to merge and feed it in ffmpeg
+        # Since, other method does not work 
+        # Due to codec, format and etc. 
+        
         with open(absPath, "w") as f:
             f.write("\n".join(["file '%s'" % file for file in files]))
         
@@ -255,6 +268,7 @@ class Video:
         
         self.cmd.setTitle(conf.get("title", "No Title"))
         self.cmd.setOutput(o)
+        
         try:
             self.execute([
                 # Import File Manually. Required when using concat format
@@ -283,6 +297,11 @@ class Video:
             
         
     def rmDuplicatedFrames(self, i, o, conf):
+        """
+        Remove duplicated frames
+        Using FFMPEG 'mpdecimate,setpts=N/FRAME_RATE/TB' filter
+        To eliminate less busy frames
+        """
         
         self.cmd.setTitle(conf.get("title", "Remove Duplicated Frame"))
         self.cmd.setInput(i)

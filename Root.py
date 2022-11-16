@@ -17,8 +17,6 @@ class Root:
     logger = writeLog
     envRes = envRes
     
-    get = envRes.get
-    set = envRes.set
     failsafe = Failsafe
     timer = Timer
     storage_manager = StorageManager()

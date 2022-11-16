@@ -13,15 +13,13 @@ environ.__ENVIRONMENT_VARIABLES__ = {}
 
 class envRes:
     
-    __envRes_data__ = environ.__ENVIRONMENT_VARIABLES__
-    
     """
     def __init__(self, key):
         self.__envres_key__ = key
         
     """
     
-    def set(self, possibly_key, value) -> None:
+    def set(possibly_key, value) -> None:
         ## Args : possibly_key -> any
         ## Args : value -> any
         
@@ -31,10 +29,10 @@ class envRes:
             value = possibly_key
         #    key = self.__envres_key__
             
-        self.__envRes_data__[key] = value
+        environ.__ENVIRONMENT_VARIABLES__[key] = value
         
     
-    def get(self, key):
+    def get(key):
         ## Args : key -> string
         ## Returns any
         
@@ -44,7 +42,7 @@ class envRes:
                 key = self.__envres_key__
             """
             
-            self.__envRes_data__[key]
+            return environ.__ENVIRONMENT_VARIABLES__[key]
         
         except KeyError:
             return None
