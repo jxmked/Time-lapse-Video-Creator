@@ -11,6 +11,7 @@ from __includes__.timer import Timer
 from __includes__.video_file import VideoFile as VF
 from __includes__.envres import envRes
 
+from Root import Root
 # Flush Buffered
 #from functools import partial as fPartial
 #print = fPartial(print, flush=True)
@@ -22,11 +23,12 @@ import json
 import sys
 import os
 
-class Video:
+class Video(Root):
     
-    __root__ = "."#os.path.dirname(__name__)
+    
     
     def __init__(self):
+        super().__init__()
         
         self.objectName = self.__class__.__name__
         
@@ -91,14 +93,16 @@ class Video:
         It may crash the system in some devices due to lack of memory
         """
         
+        # Select on option below
         selected = {
-            "quality" : "medium",
-            "format" : "mp4", # output format
+            "quality" : "medium", # Select on`quality` option below 
+            "format" : "mp4", # Select on `compression` option below
             
             # The slower the better quality
-            "preset" : "veryfast" # https://trac.ffmpeg.org/wiki/Encode/H.264
+            "preset" : "fast" # https://trac.ffmpeg.org/wiki/Encode/H.264
         }
         
+        # Select Quality
         quality = {
             "depend" : {
                 "framerate" : "%s", # Frame rate from video File

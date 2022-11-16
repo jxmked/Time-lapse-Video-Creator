@@ -16,15 +16,12 @@ from __includes__.video import Video
 
 class Main(Root):
     
-    __root__ = dirname(__file__)
-    
-    
     def __init__(self):
+        ## dev | prod
         envRes.set("ENV_MODE", "dev")
-        print(self.__root__)
+        envRes.set("ROOT", dirname(__file__))
         
-        
-        
+        vid = Video()
         
      
 

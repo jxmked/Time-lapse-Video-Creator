@@ -11,16 +11,21 @@ from __includes__.failsafe import Failsafe
 from __includes__.timer import Timer
 from __includes__.StorageManager import StorageManager
 from __includes__.envres import envRes
+from __includes__.command import Command
 
 class Root:
     
-    logger = writeLog
-    envRes = envRes
-    
-    failsafe = Failsafe
-    timer = Timer
-    storage_manager = StorageManager()
-    #notif = Notification
-    
     def __init__(self):
+        self.__root__ = envRes.get("ROOT")
+        self.logger = writeLog
+        self.envRes = envRes
+        
+        self.failsafe = Failsafe
+        self.timer = Timer
+        self.storage_manager = StorageManager()
+        #self.notif = Notification
+        
+        self.cmd = Command()
+        self.execute = self.cmd.execute
+    
         pass
