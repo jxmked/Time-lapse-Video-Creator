@@ -35,22 +35,18 @@ class Video(Root):
         self.videoPath = os.path.join(self.__root__, "Video In")
         self.validTypes = ["mp4", "avi", "mov", "flv", "wma"]
         
-        self.files = getFiles(self.videoPath, self.validTypes)
-        self.processed = os.path.join(self.__root__, "__Resources__")
+        
+        createDir(self.processed)
+        createDir(self.videoPath)
         
         if not os.path.isdir(self.videoPath):
-            createDir(self.videoPath)
             #nf.error()
             raise Exception("%s looks empty" % self.videoPath)
             
-        createDir(self.processed)
-        
+        self.files = getFiles(self.videoPath, self.validTypes)
         self.output = "Output" # Output name
         
         self.fs = Failsafe(self.objectName)
-        
-        self.cmd = Command()
-        self.execute = self.cmd.execute
         
         self.timers = {}
         
@@ -253,15 +249,13 @@ class Video(Root):
             "-movflags +faststart" # Playable even it is still downloading
         ], conf.get("execute", 1))
         
+    
     def mergeVideos(self, files, o, conf):
-        textFile = "__tmf__.txt"
-        absPath = os.path.join(self.__root__, textFile)
-        
         # Write text file contains video to merge and feed it in ffmpeg
         # Since, other method does not work 
         # Due to codec, format and etc. 
         
-        with open(absPath, "w") as f:
+        with open(self.mergedFile, "w") as f:
             f.write("\n".join(["file '%s'" % file for file in files]))
         
         vc = conf.get("video_codec", "libx264") # Codec
@@ -295,7 +289,7 @@ class Video(Root):
         
         finally:
             try:
-                os.remove(textFile)
+                os.remove(self.mergedFile)
             except FileNotFoundError:
                 pass
             

@@ -13,6 +13,9 @@ from __includes__.StorageManager import StorageManager
 from __includes__.envres import envRes
 from __includes__.command import Command
 
+
+import os
+
 class Root:
     
     def __init__(self):
@@ -27,5 +30,14 @@ class Root:
         
         self.cmd = Command()
         self.execute = self.cmd.execute
-    
+        
+        """
+        Output resources
+        
+        - Duplicated frames removed
+        - Trimmed and processed Audio
+        - Final Output
+        """
+        self.processed = os.path.join(self.__root__, "__Resources__")
+        
         pass
