@@ -4,7 +4,6 @@
 
 # Import Functions
 from __includes__.helpers import *
-#from __includes__.notification import Notification
 from __includes__.failsafe import Failsafe
 from __includes__.command import Command
 from __includes__.timer import Timer
@@ -12,12 +11,6 @@ from __includes__.video_file import VideoFile as VF
 from __includes__.envres import envRes
 
 from Root import Root
-# Flush Buffered
-#from functools import partial as fPartial
-#print = fPartial(print, flush=True)
-
-#nf = Notification()
-#nf.mute()
 
 import json
 import sys
@@ -33,11 +26,13 @@ class Video(Root):
         self.objectName = self.__class__.__name__
         
         self.videoPath = os.path.join(self.__root__, "Video In")
-        self.validTypes = ["mp4", "avi", "mov", "flv", "wma"]
         
+        self.validTypes = ["mp4", "avi", "mov", "flv", "wma"]
         
         createDir(self.processed)
         createDir(self.videoPath)
+        
+        self.storage_manager.setObjectName(self.objectName)
         
         if not os.path.isdir(self.videoPath):
             #nf.error()
@@ -46,7 +41,7 @@ class Video(Root):
         self.files = getFiles(self.videoPath, self.validTypes)
         self.output = "Output" # Output name
         
-        self.fs = Failsafe(self.objectName)
+        self.fs = self.failsafe(self.objectName)
         
         self.timers = {}
         
@@ -95,6 +90,7 @@ class Video(Root):
             "format" : "mp4", # Select on `compression` option below
             
             # The slower the better quality
+            # `medium` - default
             "preset" : "fast" # https://trac.ffmpeg.org/wiki/Encode/H.264
         }
         
@@ -125,7 +121,7 @@ class Video(Root):
                 "bitrate" : "500k"
             }
         }
-            
+        
         # Compressions Option
         compression = {
             "mp4" : {
@@ -146,7 +142,10 @@ class Video(Root):
         tmp = {}
         
         print("Encoding Filenames")
-        
+        """
+        Re-encoding filenames to escape some invalid characters 
+        from getting to ffmpeg
+        """
         ### Create Video File Object for Each Video ###
         
         for index in range(l):
@@ -205,7 +204,7 @@ class Video(Root):
             fmergeOut = os.path.join(self.processed, "_Raw_merged.mp4")
             
             args = {
-                "title": "Merge (%s) files" % i
+                "title": "Merge (%s) files" % l
             }
             
             if envRes.get("ENV_MODE") == "dev":
@@ -244,7 +243,7 @@ class Video(Root):
             "-preset '%s'" % conf.get("preset", "medium"),
             
             # https://superuser.com/questions/908295/ffmpeg-libx264-how-to-specify-a-variable-frame-rate-but-with-a-maximum
-            "-vsync vfr",
+            "-fps_mode vfr",
             "-pix_fmt yuv420p",
             "-movflags +faststart" # Playable even it is still downloading
         ], conf.get("execute", 1))
@@ -272,9 +271,9 @@ class Video(Root):
                 # Import File Manually. Required when using concat format
                 "-f concat",
                 "-safe 0",
-                "-i \"%s\"" % absPath,
+                "-i \"%s\"" % self.mergedFile,
                 "-an -sn",
-                "-vsync vfr",
+                "-fps_mode vfr",
                 "-pix_fmt yuv420p",
                 "-c:v %s" % vc,
                 "-preset %s" % ps,
@@ -324,10 +323,10 @@ class Video(Root):
             "-r %s" % fr,
             
             # https://stackoverflow.com/questions/25569180/ffmpeg-convert-without-loss-quality
-            "-qscale 0", # Keep Video Quality
+            "-q:v 0", # Keep Video Quality
                     
             # https://superuser.com/questions/908295/ffmpeg-libx264-how-to-specify-a-variable-frame-rate-but-with-a-maximum
-            "-vsync vfr",
+            "-fps_mode vfr",
             "-pix_fmt yuv420p",
             "-movflags +faststart", # Playable even it is still downloading
             

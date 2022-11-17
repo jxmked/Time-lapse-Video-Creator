@@ -25,7 +25,9 @@ class Root:
         
         self.failsafe = Failsafe
         self.timer = Timer
+        self.timers = {}
         self.storage_manager = StorageManager()
+        
         #self.notif = Notification
         
         self.cmd = Command()

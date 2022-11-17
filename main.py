@@ -22,7 +22,7 @@ class Main(Root):
         envRes.set("ROOT", dirname(__file__))
         
         vid = Video()
-        
+        vid.prepareFiles(vid.files)
      
 
 

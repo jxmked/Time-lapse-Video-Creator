@@ -1,7 +1,8 @@
 .vscode
 .nomedia
-Audio In
-Video In
+/Audio In
+/Video In
+/__Resources__
 balancer.py
 __pycache__
 .mypy_cache

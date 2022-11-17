@@ -18,7 +18,7 @@ class envRes:
         self.__envres_key__ = key
         
     """
-    
+    @staticmethod
     def set(possibly_key, value) -> None:
         ## Args : possibly_key -> any
         ## Args : value -> any
@@ -31,7 +31,7 @@ class envRes:
             
         environ.__ENVIRONMENT_VARIABLES__[key] = value
         
-    
+    @staticmethod
     def get(key):
         ## Args : key -> string
         ## Returns any

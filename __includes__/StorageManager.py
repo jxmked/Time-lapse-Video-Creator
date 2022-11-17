@@ -5,6 +5,7 @@
 
 from os import makedirs
 from os.path import isfile, join, isdir
+from __includes__.envres import envRes
 
 class StorageManager(object):
     
@@ -40,10 +41,10 @@ class StorageManager(object):
         if not isdir(p) and not isfile(p):
             makedirs(p)
             
-        elif isfile(p) and self.SYS_ENV in ["development", "debug", "logging"]:
+        elif isfile(p) and envRes.get("ENV_MODE") in ["development", "debug", "logging"]:
             self.writeLog("StorageManager", '{p} does exists and it is a file', "error")
             
-            if self.SYS_ENV == "development":
+            if envRes.get("ENV_MODE") == "development":
                 raise Exception('{p} is already existing but as a file.')
             
         
