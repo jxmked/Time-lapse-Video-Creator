@@ -4,10 +4,9 @@
 
 # Import Functions
 from __includes__.helpers import *
-from __includes__.failsafe import Failsafe
-from __includes__.command import Command
-from __includes__.timer import Timer
-from __includes__.video_file import VideoFile as VF
+
+from __includes__.model.timer import Timer
+from __includes__.model.video_file import VideoFile as VF
 from __includes__.envres import envRes
 
 from Root import Root
@@ -17,7 +16,6 @@ import sys
 import os
 
 class Video(Root):
-    
     
     
     def __init__(self):

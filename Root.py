@@ -6,12 +6,12 @@
 # Root contains global in-class method
 
 #from __includes__.notification import Notification
-from __includes__.Logging import writeLog 
-from __includes__.failsafe import Failsafe
-from __includes__.timer import Timer
-from __includes__.StorageManager import StorageManager
+from __includes__.model.Logging import writeLog 
+from __includes__.model.failsafe import Failsafe
+from __includes__.model.timer import Timer
+from __includes__.model.StorageManager import StorageManager
 from __includes__.envres import envRes
-from __includes__.command import Command
+from __includes__.model.command import Command
 
 
 import os

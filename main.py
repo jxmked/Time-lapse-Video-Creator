@@ -12,7 +12,7 @@ from Root import Root
 from __includes__.envres import envRes
 #from __includes__.config import Config
 #from Controller import Controller
-from __includes__.video import Video
+from __includes__.model.video import Video
 
 class Main(Root):
     

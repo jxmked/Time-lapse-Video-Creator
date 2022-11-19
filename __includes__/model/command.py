@@ -6,7 +6,7 @@
 # Execute commands
 
 from os import system
-from __includes__.config import Config
+from __includes__.model.config import Config
 
 class Command(Config):
     
