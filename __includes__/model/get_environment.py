@@ -12,7 +12,9 @@ class Get_Environment:
         # Get the parent process name.
 
         print(self.isWindow())
+        print(self.isLinux())
 
+        return
         try:
             import psutil
 
@@ -41,7 +43,19 @@ class Get_Environment:
 
         return False
     
+    def isLinux(self):
+        try:
+            name:str = os.name
+            platform:str = sys.platform
+            env:str = os.environ.get("OS")
 
+            print(name, platform, env)
+            if name == "posix" or platform == "linux" or env == None:
+                return True
+        except:
+            pass
+
+        return False
 
 
     def isPowerShell(self):
