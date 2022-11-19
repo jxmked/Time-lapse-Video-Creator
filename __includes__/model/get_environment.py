@@ -11,6 +11,8 @@ class Get_Environment:
     def __init__(self) -> None:
         # Get the parent process name.
 
+        print(self.isWindow())
+
         try:
             import psutil
 
@@ -23,8 +25,6 @@ class Get_Environment:
             pass
             #print(BE)
 
-
-        print(self.isWindow())
         pass
     
     def isWindow(self) -> bool:
@@ -33,6 +33,7 @@ class Get_Environment:
             platform:str = sys.platform
             env:str = os.environ.get("OS")
 
+            print(name, platform, env)
             if name == "nt" or platform == "win32" or env == "Windows_NT":
                 return True
         except:
