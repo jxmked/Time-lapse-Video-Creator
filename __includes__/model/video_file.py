@@ -149,11 +149,10 @@ class VideoFile(object):
         # We can extract metadata from media file
         
         tmp = join(self.__tmp_dir, "__%s__%s" % (self.__class__.__name__, "Extracted.json"))
-
+        
         cmd = [
             "ffprobe",
-            "-v",
-            "quiet",
+            "-v quiet",
             "-show_format",
             "-show_streams",
             "-print_format",
@@ -170,39 +169,38 @@ class VideoFile(object):
         
         # --------------------------
         # Even this one 
-        # res = subprocess.run(cmd, capture_output=True)
+        # res = subprocess.run(cmd, capture_output=True, text=True)
+
+        # print(res.stdout)
+
+        # print(res.stderr)
         # res = str(res.stdout)[2:-1] # Convert to string then remove b''
         # res = re.sub(r"\\n", r"\n", res) # Fix New Line Character
         # --------------------------
         
         # --------------------------
         # Exract Data from Video and save it as a text file
-        cmd.append("&> '%s'" % tmp)
+        # cmd.append("&> '%s'" % tmp)
 
-        system(" ".join(cmd))
+        # system(" ".join(cmd))
         
-        # Open the file, load the string
-        # Close the file and delete
-        res = None
-        with open(tmp, "r") as file:
-            res = file.read()
+        # # Open the file, load the string
+        # # Close the file and delete
+        # res = None
+        # with open(tmp, "r") as file:
+        #     res = file.read()
         
-        try:
-            remove(tmp)
-        except FileNotFoundError:
-            pass
+        # try:
+        #     remove(tmp)
+        # except FileNotFoundError:
+        #     pass
         # --------------------------
         
+        cmd = " ".join(cmd)
+        res = subprocess.run(cmd, capture_output=True, text=True)
 
 
-
-        # res = subprocess.run(args=cmd, shell=False, capture_output=True)
-        # print(res)
-        # return
-
-
-
-        self.data["raw_json"] = loads(res)
+        self.data["raw_json"] = loads(res.stdout)
     
 """
 
