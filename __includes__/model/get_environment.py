@@ -4,30 +4,46 @@
 # @Package Name TLVC (Time Lapse Video Creator)
 #
 # Get Current Environment
+
 from __includes__.envres import envRes
 import os, re, sys
 
 class Get_Environment:
     def __init__(self) -> None:
         # Get the parent process name.
+        
+        if self.isWindow():
+            try:
+                import psutil
 
-        print(self.isWindow())
-        print(self.isLinux())
+                self.pprocName = psutil.Process(os.getppid()).name()
 
-        return
-        try:
-            import psutil
+                pwrshll:bool = self.isPowerShell()
+                cmd:bool = self.isCommandPrompt()
 
-            self.pprocName = psutil.Process(os.getppid()).name()
+                """
+                Raise exception if both pwrshll and cmd are true
+                We cannot make any system command due to environment collision
+                """
+                
+                if pwrshll:
+                    envRes.set("ENV", "powershell")
+                
+                elif cmd:
+                    envRes.set("ENV", "cmd")
+                
+                else:
+                    raise Exception("Cannot Start: Unknown Environment")
+                
+            except BaseException as BE:
+                raise Exception("Cannot Start: Unknown Environment")
+                
+        elif self.isLinux():
+            envRes.set("ENV", "linux")
+        
+        else:
+            envRes.set("ENV", "null")
 
-            print(self.pprocName)
-
-            self.isPowerShell()
-        except BaseException as BE:
-            pass
-            #print(BE)
-
-        pass
     
     def isWindow(self) -> bool:
         try:
@@ -35,7 +51,6 @@ class Get_Environment:
             platform:str = sys.platform
             env:str = os.environ.get("OS")
 
-            print(name, platform, env)
             if name == "nt" or platform == "win32" or env == "Windows_NT":
                 return True
         except:
@@ -49,7 +64,6 @@ class Get_Environment:
             platform:str = sys.platform
             env:str = os.environ.get("OS")
 
-            print(name, platform, env)
             if name == "posix" or platform == "linux" or env == None:
                 return True
         except:

@@ -150,7 +150,7 @@ class VideoFile(object):
         
         tmp = join(self.__tmp_dir, "__%s__%s" % (self.__class__.__name__, "Extracted.json"))
         
-        cmd = [
+        cmd:dict = [
             "ffprobe",
             "-v quiet",
             "-show_format",
@@ -178,29 +178,30 @@ class VideoFile(object):
         # res = re.sub(r"\\n", r"\n", res) # Fix New Line Character
         # --------------------------
         
+        if envRes.get("ENV") == "linux":
         # --------------------------
         # Exract Data from Video and save it as a text file
-        # cmd.append("&> '%s'" % tmp)
+            cmd.append("&> '%s'" % tmp)
 
-        # system(" ".join(cmd))
-        
-        # # Open the file, load the string
-        # # Close the file and delete
-        # res = None
-        # with open(tmp, "r") as file:
-        #     res = file.read()
-        
-        # try:
-        #     remove(tmp)
-        # except FileNotFoundError:
-        #     pass
+            system(" ".join(cmd))
+            
+            # Open the file, load the string
+            # Close the file and delete
+            res = None
+            with open(tmp, "r") as file:
+                res = file.read()
+            
+            try:
+                remove(tmp)
+            except FileNotFoundError:
+                pass
         # --------------------------
-        
+        else:
         # Having a problem running on Termux
 
         # Capture stdout from console???
-        cmd = " ".join(cmd)
-        res = subprocess.run(cmd, capture_output=True, text=True)
+            cmd = " ".join(cmd)
+            res = subprocess.run(cmd, capture_output=True, text=True)
         # --------------------------
 
         self.data["raw_json"] = loads(res.stdout)
