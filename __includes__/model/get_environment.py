@@ -27,12 +27,13 @@ class Get_Environment:
             name = os.name
             platform = sys.platform
             env = os.environ.get("OS")
-            if name == "nt" or platform == "win32" or env = "Windows_NT":
+            if name == "nt" or platform == "win32" or env == "Windows_NT":
                 return True
         except:
             pass
 
         return False
+    
 
 
 
