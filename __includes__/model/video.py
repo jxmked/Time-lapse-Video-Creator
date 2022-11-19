@@ -231,14 +231,14 @@ class Video(Root):
         self.cmd.setOutput(output)
         self.cmd.setTitle(conf.get("title", "Final Merge: Audio Video"))
         self.execute([
-            "-c:v '%s'" % conf.get("video_codec", "copy"),
-            "-c:a '%s'" % conf.get("audio_codec", "aac"),
+            "-c:v \"%s\"" % conf.get("video_codec", "copy"),
+            "-c:a \"%s\"" % conf.get("audio_codec", "aac"),
             "-q:v 0",
             "-map 0:v"
-            "-vf 'setpts=%s*PTS'" % conf.get("multiplier", "0.5"),
-            "-r '%s'" % conf.get("video_framerate", "30"),
-            "-f '%s'" % conf.get("video_format", "mp4"),
-            "-preset '%s'" % conf.get("preset", "medium"),
+            "-vf \"setpts=%s*PTS\"" % conf.get("multiplier", "0.5"),
+            "-r \"%s\"" % conf.get("video_framerate", "30"),
+            "-f \"%s\"" % conf.get("video_format", "mp4"),
+            "-preset \"%s\"" % conf.get("preset", "medium"),
             
             # https://superuser.com/questions/908295/ffmpeg-libx264-how-to-specify-a-variable-frame-rate-but-with-a-maximum
             "-fps_mode vfr",
@@ -312,12 +312,10 @@ class Video(Root):
         
         self.execute([
             "-an -sn",
-            "-vf '%s'" % vf,
-            "-c:v '%s'" % vc,
-            "-f '%s'" % ff,
-            "-write_xing 0 -id3v2_version 0", # Remove Metadata
-            "-map_metadata -1", # Remove Metadata
+            "-vf \"%s\"" % vf,
             
+            "-write_xing 0 -id3v2_version 0", # Remove Metadata
+            "-map_metadata -1", # Remove Metadata            
             "-r %s" % fr,
             
             # https://stackoverflow.com/questions/25569180/ffmpeg-convert-without-loss-quality
@@ -326,10 +324,12 @@ class Video(Root):
             # https://superuser.com/questions/908295/ffmpeg-libx264-how-to-specify-a-variable-frame-rate-but-with-a-maximum
             "-fps_mode vfr",
             "-pix_fmt yuv420p",
+            "-c:v \"%s\"" % vc,
+            "-f \"%s\"" % ff,
             "-movflags +faststart", # Playable even it is still downloading
             
             # For Development Mode
-            "-preset %s" % ps
+            "-preset \"%s\"" % ps
         ], ec)
 
 

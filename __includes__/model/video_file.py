@@ -9,8 +9,6 @@ from __includes__.envres import envRes
 from __includes__.helpers import createDir
 
 import subprocess
-import re
-
 
 
 """
@@ -179,7 +177,6 @@ class VideoFile(object):
         # res = str(res.stdout)[2:-1] # Convert to string then remove b''
         # res = re.sub(r"\\n", r"\n", res) # Fix New Line Character
         # --------------------------
-        
         if envRes.get("ENV") == "linux":
         # --------------------------
         # Exract Data from Video and save it as a text file
@@ -206,6 +203,8 @@ class VideoFile(object):
             res = subprocess.run(cmd, capture_output=True, text=True).stdout
         # --------------------------
 
+
+        # Finally, load our fetched JSON data
         self.data["raw_json"] = loads(res)
     
 """

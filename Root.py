@@ -19,6 +19,7 @@ import os
 class Root:
     
     def __init__(self):
+        self.ENV = envRes.get("ENV")
         self.__root__ = envRes.get("ROOT")
         self.logger = writeLog
         self.envRes = envRes

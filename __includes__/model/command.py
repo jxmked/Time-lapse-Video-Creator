@@ -6,6 +6,8 @@
 # Execute commands
 
 from os import system
+import subprocess
+from __includes__.envres import envRes
 from __includes__.model.config import Config
 
 class Command(Config):
@@ -41,11 +43,9 @@ class Command(Config):
     cmdLog = [] # args, state
     
     def __init__(self):
-     #   print(self.config)
-      #  Config.__init__(self, "Command")
-       # print(self.config)
-     #   self.config = self.getConfig()
-     #   print(self.config)
+        # super().__init__()
+
+        self.ENV = envRes.get("ENV")
         pass
         
     def getLogs(self):
@@ -121,8 +121,19 @@ class Command(Config):
         print(query)
         print("-+" * 10, end="-\n")
         
-        res = (system(query) if run else 0)
+        res:int = 0
+
+        if self.ENV == "powershell" or self.ENV == "cmd":
+            out:subprocess = subprocess.Popen(query, stdout=subprocess.PIPE)
+            streamdata = out.communicate()[0]
+            res = out.returncode
+
+        elif self.ENV == "linux":
+            res = (system(query) if run else 0)
         
+        else:
+            raise Exception("Failed to execute: Unknown Environment")
+
         if res == 0 and run == True:
             state = "success"
         elif run is False:
