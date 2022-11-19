@@ -30,7 +30,7 @@ class Main(Root):
         envRes.set("ENV_MODE", "dev")
 
         envRes.set("ROOT", dirname(__file__))
-        envRes.set("TMP_FOLDER", join(envRes.get("ROOT"), "__includes__", "assets", "temp"))
+        envRes.set("TMP_FOLDER", join((envRes.get("ROOT") or "."), "__includes__", "assets", "temp"))
         
         vid = Video()
         vid.prepareFiles(vid.files)

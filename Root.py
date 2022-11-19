@@ -19,14 +19,14 @@ import os
 class Root:
     
     def __init__(self):
-        self.ENV = envRes.get("ENV")
-        self.__root__ = envRes.get("ROOT")
+        self.ENV:str|None = envRes.get("ENV")
+        self.__root__:str = envRes.get("ROOT") or "."
         self.logger = writeLog
         self.envRes = envRes
         
         self.failsafe = Failsafe
         self.timer = Timer
-        self.timers = {}
+        self.timers:dict[str, int] = {}
         self.storage_manager = StorageManager()
         
         #self.notif = Notification

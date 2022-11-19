@@ -2,18 +2,16 @@
 # -*- coding UTF-8 -*-
 
 
+import os
+import sys
+
+from __includes__.envres import envRes
 # Import Functions
 from __includes__.helpers import *
-
 from __includes__.model.timer import Timer
 from __includes__.model.video_file import VideoFile as VF
-from __includes__.envres import envRes
-
 from Root import Root
 
-import json
-import sys
-import os
 
 class Video(Root):
     
@@ -21,11 +19,11 @@ class Video(Root):
     def __init__(self):
         super().__init__()
         
-        self.objectName = self.__class__.__name__
+        self.objectName:str = self.__class__.__name__
         
-        self.videoPath = os.path.join(self.__root__, "Video In")
+        self.videoPath:str = os.path.join(self.__root__, "Video In")
         
-        self.validTypes = ["mp4", "avi", "mov", "flv", "wma"]
+        self.validTypes:list = ["mp4", "avi", "mov", "flv", "wma", "mkv"]
         
         createDir(self.processed)
         createDir(self.videoPath)
@@ -36,8 +34,8 @@ class Video(Root):
             #nf.error()
             raise Exception("%s looks empty" % self.videoPath)
             
-        self.files = getFiles(self.videoPath, self.validTypes)
-        self.output = "Output" # Output name
+        self.files:list = getFiles(self.videoPath, self.validTypes)
+        self.output:str = "Output" # Output name
         
         self.fs = self.failsafe(self.objectName)
         
@@ -153,7 +151,7 @@ class Video(Root):
             
             fname = file.filename
             
-            file.data["hashed"] = "_%s_%s.%s" % (self.objectName, md5(file.absolutePath), "mp4")
+            file.data["hashed"] = "_%s_%s.%s" % (self.objectName, md5(file.absolutePath), file.fileFormat)
             
             file.data["tmp_filename"] = os.path.join(self.videoPath, file.data["hashed"])
             file.data["tmp_processed"] = os.path.join(self.processed, file.data["hashed"])
@@ -201,7 +199,7 @@ class Video(Root):
             
             fmergeOut = os.path.join(self.processed, "_Raw_merged.mp4")
             
-            args = {
+            args:dict[str, str|int|bool] = {
                 "title": "Merge (%s) files" % l
             }
             
@@ -216,7 +214,7 @@ class Video(Root):
         except BaseException as be:
             # For debug only
             exc_type, exc_obj, exc_tb = sys.exc_info()
-            print("Line Error: %s" % exc_tb.tb_lineno)
+            print("Line Error: %s" % exc_tb.tb_lineno or ".")
             print(be)
             exit(0)
     

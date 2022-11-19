@@ -12,7 +12,7 @@ from __includes__.model.config import Config
 
 class Command(Config):
     
-    config = {
+    config:dict = {
         "priority" : {
             "mode" : False,
             "level" : "-20" # -20 <-> 20
@@ -37,21 +37,21 @@ class Command(Config):
     """
     
     
-    inputList = []
-    output = ""
-    title = ""
-    cmdLog = [] # args, state
+    inputList:list = []
+    output:str = ""
+    title:str = ""
+    cmdLog:list[str] = [] # args, state
     
-    def __init__(self):
+    def __init__(self) -> None:
         # super().__init__()
 
-        self.ENV = envRes.get("ENV")
-        pass
+        self.ENV:str|None = envRes.get("ENV")
         
-    def getLogs(self):
+        
+    def getLogs(self) -> list[str]:
         return self.cmdLog
     
-    def setInput(self, arr):
+    def setInput(self, arr:list[str]|str|bool) -> None:
         if isinstance(arr, list):
             for item in arr:
                 self.inputList.append("-i \"%s\"" % item)
@@ -63,18 +63,18 @@ class Command(Config):
             if arr == False:
                 self.inputList = []
         
-    def setOutput(self, out):
+    def setOutput(self, out:str) -> None:
         self.output = "\"%s\"" % out
     
-    def setTitle(self, txt):
-        self.title = txt
+    def setTitle(self, txt:str) -> None:
+        self.title:str = txt
     
-    def execute(self, arr, run=None):
+    def execute(self, arr:list[str], run:int|bool|None=None) -> None:
         assert isinstance(arr, list), "Command must be an Array"
         
         run = (True if run in [None, 1, True] else False)
         
-        cfg = self.config
+        cfg:dict = self.config
         
         if cfg["benchmark"]["mode"]:
             if cfg["benchmark"]["level"] == "basic":
@@ -109,7 +109,7 @@ class Command(Config):
         if cfg["priority"]["mode"]:
             arr.insert(0, "nice -%s" % cfg["priority"]["level"])
         
-        query = " ".join(arr)
+        query:str = " ".join(arr)
         
         print()
         print("-+" * 10, end="-\n")
@@ -124,8 +124,8 @@ class Command(Config):
         res:int = 0
 
         if self.ENV == "powershell" or self.ENV == "cmd":
-            out:subprocess = subprocess.Popen(query, stdout=subprocess.PIPE)
-            streamdata = out.communicate()[0]
+            out:subprocess.Popen[bytes] = subprocess.Popen(query, stdout=subprocess.PIPE)
+            out.communicate()[0]
             res = out.returncode
 
         elif self.ENV == "linux":
@@ -134,6 +134,7 @@ class Command(Config):
         else:
             raise Exception("Failed to execute: Unknown Environment")
 
+        state:str|None = None
         if res == 0 and run == True:
             state = "success"
         elif run is False:
@@ -141,9 +142,12 @@ class Command(Config):
         else:
             state = "error"
         
-       # self.writeLog("Command", "Query: %s" % query, state)
-        #self.cmdLog.append(( state, query ))
+        # self.writeLog("Command", "Query: %s" % query, state)
+        # self.cmdLog.append(( state, query ))
         
         assert res == 0, "\nCurrent Command:\n\t%s" % query
         
     
+
+
+

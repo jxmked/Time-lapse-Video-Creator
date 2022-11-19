@@ -14,9 +14,12 @@ class Get_Environment:
         
         if self.isWindow():
             try:
+                """
+                psutil failing to execute in Termux
+                """
                 import psutil
 
-                self.pprocName = psutil.Process(os.getppid()).name()
+                self.pprocName:str = psutil.Process(os.getppid()).name()
 
                 pwrshll:bool = self.isPowerShell()
                 cmd:bool = self.isCommandPrompt()
@@ -49,7 +52,7 @@ class Get_Environment:
         try:
             name:str = os.name
             platform:str = sys.platform
-            env:str = os.environ.get("OS")
+            env:str|None = (os.environ.get("OS") or None)
 
             if name == "nt" or platform == "win32" or env == "Windows_NT":
                 return True
@@ -58,11 +61,11 @@ class Get_Environment:
 
         return False
     
-    def isLinux(self):
+    def isLinux(self) -> bool:
         try:
             name:str = os.name
             platform:str = sys.platform
-            env:str = os.environ.get("OS")
+            env:str|None = (os.environ.get("OS") or None)
 
             if name == "posix" or platform == "linux" or env == None:
                 return True
@@ -72,11 +75,11 @@ class Get_Environment:
         return False
 
 
-    def isPowerShell(self):
+    def isPowerShell(self) -> bool:
         # https://stackoverflow.com/questions/55597797/detect-whether-current-shell-is-powershell-in-python/55598796#55598796
 
         # See if it is Windows PowerShell (powershell.exe) or PowerShell Core (pwsh[.exe]):
         return bool(re.fullmatch('pwsh|pwsh.exe|powershell.exe', self.pprocName))
 
-    def isCommandPrompt(self):
+    def isCommandPrompt(self) -> bool:
         return bool(re.fullmatch('cmd|cmd.exe|commandprompt.exe|command.exe|command', self.pprocName))

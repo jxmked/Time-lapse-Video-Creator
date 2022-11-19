@@ -17,16 +17,16 @@ class Failsafe:
     """
     Reverse modified filenames from unexpected exit
     """
-    __prename = "__failsafe_"
-    __bk_dir = "__includes__/assets/Failsafe"
-    __flag = False
-    __rData = []
-    
-    def __init__(self, appname="Runtime"):
-        self.appname = slugify(appname)
+    __prename:str = "__failsafe_"
+    __bk_dir:str = "__includes__/assets/Failsafe"
+    __flag:bool = False
+    __rData:list = []
+
+    def __init__(self, appname:str="Runtime"):
+        self.appname:str = slugify(appname)
         
-        self.preName = join(self.__bk_dir, self.__prename)
-        self.preName = self.joinNames(self.preName, self.appname)
+        self.preName:str = join(self.__bk_dir, self.__prename)
+        self.preName:str = self.joinNames(self.preName, self.appname)
         
         createDir(self.__bk_dir)
         
