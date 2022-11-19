@@ -5,28 +5,34 @@
 #
 # Get Current Environment
 from __includes__.envres import envRes
-import os, psutil, re, sys
+import os, re, sys
 
 class Get_Environment:
     def __init__(self) -> None:
         # Get the parent process name.
 
         try:
+            import psutil
+
             self.pprocName = psutil.Process(os.getppid()).name()
 
             print(self.pprocName)
 
             self.isPowerShell()
         except BaseException as BE:
-            print(BE)
+            pass
+            #print(BE)
 
+
+        print(self.isWindow())
         pass
     
-    def isWindow(self):
+    def isWindow(self) -> bool:
         try:
-            name = os.name
-            platform = sys.platform
-            env = os.environ.get("OS")
+            name:str = os.name
+            platform:str = sys.platform
+            env:str = os.environ.get("OS")
+
             if name == "nt" or platform == "win32" or env == "Windows_NT":
                 return True
         except:

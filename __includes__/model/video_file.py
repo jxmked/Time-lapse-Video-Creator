@@ -196,9 +196,12 @@ class VideoFile(object):
         #     pass
         # --------------------------
         
+        # Having a problem running on Termux
+
+        # Capture stdout from console???
         cmd = " ".join(cmd)
         res = subprocess.run(cmd, capture_output=True, text=True)
-
+        # --------------------------
 
         self.data["raw_json"] = loads(res.stdout)
     
