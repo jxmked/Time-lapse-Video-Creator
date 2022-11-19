@@ -148,7 +148,7 @@ class VideoFile(object):
         # Using FFPROBE from FFMPEG, 
         # We can extract metadata from media file
         
-        tmp = join(self.__tmp_dir, "__%s__%s" % (self.__class__.__name__, "Extracted.json"))
+        tmp:str = join(self.__tmp_dir, "__%s__%s" % (self.__class__.__name__, "Extracted.json"))
         
         cmd:dict = [
             "ffprobe",
@@ -159,7 +159,9 @@ class VideoFile(object):
             "json",
             "\"%s\"" % self.absolutePath
         ]
-        
+
+        res:str|None = None
+
         # --------------------------
         # I tried this but doesn't work in my case. I don't know why
         # Both of this subprocess returns nothing
@@ -187,7 +189,7 @@ class VideoFile(object):
             
             # Open the file, load the string
             # Close the file and delete
-            res = None
+            
             with open(tmp, "r") as file:
                 res = file.read()
             
@@ -201,10 +203,10 @@ class VideoFile(object):
 
         # Capture stdout from console???
             cmd = " ".join(cmd)
-            res = subprocess.run(cmd, capture_output=True, text=True)
+            res = subprocess.run(cmd, capture_output=True, text=True).stdout
         # --------------------------
 
-        self.data["raw_json"] = loads(res.stdout)
+        self.data["raw_json"] = loads(res)
     
 """
 
