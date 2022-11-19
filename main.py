@@ -24,7 +24,7 @@ class Main(Root):
         Get_Environment()
 
 
-        return
+        # return
         # print("Running on Python Version %s" % sys.version)
         ## dev | prod
         envRes.set("ENV_MODE", "dev")

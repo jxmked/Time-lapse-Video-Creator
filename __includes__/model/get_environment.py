@@ -5,7 +5,7 @@
 #
 # Get Current Environment
 from __includes__.envres import envRes
-import os, psutil, re
+import os, psutil, re, sys
 
 class Get_Environment:
     def __init__(self) -> None:
@@ -21,6 +21,20 @@ class Get_Environment:
             print(BE)
 
         pass
+    
+    def isWindow(self):
+        try:
+            name = os.name
+            platform = sys.platform
+            env = os.environ.get("OS")
+            if name == "nt" or platform == "win32" or env = "Windows_NT":
+                return True
+        except:
+            pass
+
+        return False
+
+
 
     def isPowerShell(self):
         # https://stackoverflow.com/questions/55597797/detect-whether-current-shell-is-powershell-in-python/55598796#55598796
