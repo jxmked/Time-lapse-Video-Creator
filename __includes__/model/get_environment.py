@@ -10,11 +10,15 @@ import os, psutil, re
 class Get_Environment:
     def __init__(self) -> None:
         # Get the parent process name.
-        self.pprocName = psutil.Process(os.getppid()).name()
 
-        print(self.pprocName)
+        try:
+            self.pprocName = psutil.Process(os.getppid()).name()
 
-        self.isPowerShell()
+            print(self.pprocName)
+
+            self.isPowerShell()
+        except BaseException as BE:
+            print(BE)
 
         pass
 
