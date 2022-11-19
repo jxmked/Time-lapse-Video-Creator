@@ -47,7 +47,8 @@ def createDir(path):
     Create Directory On Writable Path
     """
     try:
-        os.mkdir(path, 0o777)
+        
+        os.makedirs(path, 0o777)
     except BaseException as ex:
         #raise (ex)
         pass

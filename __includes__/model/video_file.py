@@ -5,11 +5,13 @@
 from os import system, remove, rename
 from os.path import join, basename, dirname, exists
 from json import loads
+from __includes__.envres import envRes
+from __includes__.helpers import createDir
 
-#import subprocess
-#import re
+import subprocess
+import re
 
-from __includes__.helpers import createDir, md5
+
 
 """
 Extract Video Data Using FFMPEGS' FFPROBE
@@ -45,11 +47,12 @@ class VideoFile(object):
         
         self.renamed = False # Will Triggered If We
         
-        self.__tmp_dir = "__includes__/assets/temp"
+        self.__tmp_dir = envRes.get("TMP_FOLDER")
         
-        self.__available_streams = []
+        # self.__available_streams = []
         
         createDir(self.__tmp_dir)
+
         self.trueName = url
         
         self.__set_urls(url)
@@ -146,7 +149,7 @@ class VideoFile(object):
         # We can extract metadata from media file
         
         tmp = join(self.__tmp_dir, "__%s__%s" % (self.__class__.__name__, "Extracted.json"))
-        
+
         cmd = [
             "ffprobe",
             "-v",
@@ -161,20 +164,21 @@ class VideoFile(object):
         # --------------------------
         # I tried this but doesn't work in my case. I don't know why
         # Both of this subprocess returns nothing
-        #res = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        #res = res.communicate()[0]
+        # res = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        # res = res.communicate()[0]
         # --------------------------
         
         # --------------------------
         # Even this one 
-        #res = subprocess.run(cmd, capture_output=True)
-        #res = str(res.stdout)[2:-1] # Convert to string then remove b''
-        #res = re.sub(r"\\n", r"\n", res) # Fix New Line Character
+        # res = subprocess.run(cmd, capture_output=True)
+        # res = str(res.stdout)[2:-1] # Convert to string then remove b''
+        # res = re.sub(r"\\n", r"\n", res) # Fix New Line Character
         # --------------------------
         
         # --------------------------
         # Exract Data from Video and save it as a text file
         cmd.append("&> '%s'" % tmp)
+
         system(" ".join(cmd))
         
         # Open the file, load the string
@@ -189,6 +193,15 @@ class VideoFile(object):
             pass
         # --------------------------
         
+
+
+
+        # res = subprocess.run(args=cmd, shell=False, capture_output=True)
+        # print(res)
+        # return
+
+
+
         self.data["raw_json"] = loads(res)
     
 """
