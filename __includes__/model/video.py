@@ -46,14 +46,14 @@ class Video(Root):
     
     def prepareFiles(self, files):
         
-        l = len(files)
+        l:int = len(files)
         
         if l == 0:
             #nf.error()
             print("No Video Files to merge")
             exit(0)
         
-        files = sortThis(files)
+        files:list[str] = sortThis(files)
         
         """
         We can use this preset and crf for lower output
@@ -81,7 +81,7 @@ class Video(Root):
         """
         
         # Select on option below
-        selected = {
+        selected:dict[str,str] = {
             "quality" : "medium", # Select on`quality` option below 
             "format" : "mp4", # Select on `compression` option below
             
@@ -91,7 +91,7 @@ class Video(Root):
         }
         
         # Select Quality
-        quality = {
+        quality:dict:[str, dict[str,str]] = {
             "depend" : {
                 "framerate" : "%s", # Frame rate from video File
                 "bitrate" : "%s" # Bit Rate From Video File
@@ -119,7 +119,7 @@ class Video(Root):
         }
         
         # Compressions Option
-        compression = {
+        compression:dict[str, dict[str,str]] = {
             "mp4" : {
                 "output" : "%s.mp4" % self.output,
                 "codec" : "libx264",
@@ -134,8 +134,8 @@ class Video(Root):
             }
         }
         
-        vfs = []
-        tmp = {}
+        vfs:list[str] = []
+        tmp:dict[str, str] = {}
         
         print("Encoding Filenames")
         """
@@ -167,7 +167,7 @@ class Video(Root):
         try:
             ### Remove Duplicated Frames ###
             
-            fmerge = []
+            fmerge:list[str] = []
             for file in vfs:
                 # Using this filters will get out of sync with the audio
                 # So, it is better to not to include audio to the process. (I mean removing it)
@@ -177,10 +177,10 @@ class Video(Root):
                
                 # https://stackoverflow.com/questions/37088517/remove-sequentially-duplicate-frames-when-using-ffmpeg#answer-52062421
                 #vf = "mpdecimate,setpts=N/FRAME_RATE/TB"
-                vf = "mpdecimate,setpts=N/%s/TB" % file.framerate
+                vf:str = "mpdecimate,setpts=N/%s/TB" % file.framerate
                 
                 fmerge.append(file.data["tmp_processed"])
-                args = {
+                args:dict[str, str|bool|int] = {
                     "title": file.filename,
                     "video_filter": vf
                 }
@@ -197,7 +197,7 @@ class Video(Root):
             
             ### Video merge ###
             
-            fmergeOut = os.path.join(self.processed, "_Raw_merged.mp4")
+            fmergeOut:str = os.path.join(self.processed, "_Raw_merged.mp4")
             
             args:dict[str, str|int|bool] = {
                 "title": "Merge (%s) files" % l
@@ -219,7 +219,7 @@ class Video(Root):
             exit(0)
     
     
-    def finalMerge(self, video, audio, output, conf=None):
+    def finalMerge(self, video:str, audio:str, output:str, conf:dict[str,str|bool|int]|None=None):
         assert isinstance(video, VF), "Input video must be an instance of VideoFile"
         #assert isinstance(audio, AF), "Input audio must be an instance of AudioFile"
         
