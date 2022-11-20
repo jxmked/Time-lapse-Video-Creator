@@ -140,7 +140,7 @@ class Video(Root):
         print("Encoding Filenames")
         """
         Re-encoding filenames to escape some invalid characters 
-        from getting to ffmpeg
+        from getting into ffmpeg
         """
         ### Create Video File Object for Each Video ###
         

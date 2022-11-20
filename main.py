@@ -23,7 +23,7 @@ class Main(Root):
         envRes.set("ENV_MODE", "dev")
 
         envRes.set("ROOT", dirname(__file__))
-        envRes.set("TMP_FOLDER", join((envRes.get("ROOT") or "."), "__includes__", "assets", "temp"))
+        envRes.set("TMP_FOLDER", join(str(envRes.get("ROOT") or "."), "__includes__", "assets", "temp"))
         
 
         super().__init__()
@@ -34,8 +34,10 @@ class Main(Root):
 
         # Failure to restore name automatically
         # Use the line below to restore it without rerunning the time-lapse video compiler
-        self.failsafe().restore()
-        return
+
+        # self.failsafe().restore()
+        # return
+
         
         
         

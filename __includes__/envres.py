@@ -7,10 +7,6 @@
 # 
 # Environment Variables - A Runtime variables
 
-from os import environ
-
-environ.__ENVIRONMENT_VARIABLES__ = {}
-
 class envRes:
     
     """
@@ -18,21 +14,25 @@ class envRes:
         self.__envres_key__ = key
         
     """
+
+    __STATIC_GLOBAL_VARIABLE:dict[str, str|int|bool|list|dict] = {}
+
+
     @staticmethod
-    def set(possibly_key, value) -> None:
+    def set(possibly_key:str, value:str|bool|int) -> None:
         ## Args : possibly_key -> any
         ## Args : value -> any
         
-        key = possibly_key
+        key:str = possibly_key
         
         if not value:
             value = possibly_key
         #    key = self.__envres_key__
-            
-        environ.__ENVIRONMENT_VARIABLES__[key] = value
+        
+        envRes.__STATIC_GLOBAL_VARIABLE.__setitem__(key, value)
         
     @staticmethod
-    def get(key):
+    def get(key:str) -> str|int|bool|list|dict|None:
         ## Args : key -> string
         ## Returns any
         
@@ -42,7 +42,7 @@ class envRes:
                 key = self.__envres_key__
             """
             
-            return environ.__ENVIRONMENT_VARIABLES__[key]
+            return envRes.__STATIC_GLOBAL_VARIABLE.get(key)
         
         except KeyError:
             return None

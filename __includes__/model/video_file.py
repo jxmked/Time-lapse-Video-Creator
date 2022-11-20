@@ -45,7 +45,7 @@ class VideoFile(object):
         
         self.renamed:bool = False # Will Triggered If We
         
-        self.__tmp_dir:str = (envRes.get("TMP_FOLDER") or envRes.get("ROOT") or ".")
+        self.__tmp_dir:str = str(envRes.get("TMP_FOLDER") or envRes.get("ROOT") or ".")
         
         # self.__available_streams = []
         
