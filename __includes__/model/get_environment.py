@@ -9,6 +9,9 @@ from __includes__.envres import envRes
 import os, re, sys
 
 class Get_Environment:
+
+    __psutil_failed__:bool = True
+
     def __init__(self) -> None:
         # Get the parent process name.
         
@@ -20,6 +23,8 @@ class Get_Environment:
                 import psutil
 
                 self.pprocName:str = psutil.Process(os.getppid()).name()
+                
+                Get_Environment.__psutil_failed__ = False
 
                 pwrshll:bool = self.isPowerShell()
                 cmd:bool = self.isCommandPrompt()
@@ -39,6 +44,7 @@ class Get_Environment:
                     raise Exception("Cannot Start: Unknown Environment")
                 
             except BaseException as BE:
+                print(BE)
                 raise Exception("Cannot Start: Unknown Environment")
                 
         elif self.isLinux():
@@ -50,6 +56,7 @@ class Get_Environment:
     
     def isWindow(self) -> bool:
         try:
+            
             name:str = os.name
             platform:str = sys.platform
             env:str|None = (os.environ.get("OS") or None)
@@ -74,12 +81,22 @@ class Get_Environment:
 
         return False
 
-
     def isPowerShell(self) -> bool:
+        if Get_Environment.__psutil_failed__:
+            return False
+        
         # https://stackoverflow.com/questions/55597797/detect-whether-current-shell-is-powershell-in-python/55598796#55598796
 
         # See if it is Windows PowerShell (powershell.exe) or PowerShell Core (pwsh[.exe]):
         return bool(re.fullmatch('pwsh|pwsh.exe|powershell.exe', self.pprocName))
 
     def isCommandPrompt(self) -> bool:
+        if Get_Environment.__psutil_failed__:
+            return False
+        
         return bool(re.fullmatch('cmd|cmd.exe|commandprompt.exe|command.exe|command', self.pprocName))
+
+
+
+
+

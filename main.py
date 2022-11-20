@@ -19,18 +19,26 @@ from __includes__.model.get_environment import Get_Environment
 class Main(Root):
     
     def __init__(self):
-
-        # Set Environment
-        Get_Environment()
-
-
-        # return
-        # print("Running on Python Version %s" % sys.version)
         ## dev | prod
         envRes.set("ENV_MODE", "dev")
 
         envRes.set("ROOT", dirname(__file__))
         envRes.set("TMP_FOLDER", join((envRes.get("ROOT") or "."), "__includes__", "assets", "temp"))
+        
+
+        super().__init__()
+
+        # Set Environment
+        Get_Environment()
+
+
+        # Failure to restore name automatically
+        # Use the line below to restore it without rerunning the time-lapse video compiler
+        self.failsafe().restore()
+        return
+        
+        
+        
         
         vid = Video()
         vid.prepareFiles(vid.files)

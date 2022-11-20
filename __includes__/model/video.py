@@ -44,7 +44,7 @@ class Video(Root):
         self.mergedFile = os.path.join(self.__root__, "__%s_File_To_Merge.txt" % self.objectName)
         
     
-    def prepareFiles(self, files):
+    def prepareFiles(self, files:list[str]):
         
         l:int = len(files)
         
@@ -53,7 +53,7 @@ class Video(Root):
             print("No Video Files to merge")
             exit(0)
         
-        files:list[str] = sortThis(files)
+        files = sortThis(files)
         
         """
         We can use this preset and crf for lower output
@@ -91,7 +91,7 @@ class Video(Root):
         }
         
         # Select Quality
-        quality:dict:[str, dict[str,str]] = {
+        quality:dict[str, dict[str, str]] = {
             "depend" : {
                 "framerate" : "%s", # Frame rate from video File
                 "bitrate" : "%s" # Bit Rate From Video File
@@ -134,7 +134,7 @@ class Video(Root):
             }
         }
         
-        vfs:list[str] = []
+        vfs:list[VF] = []
         tmp:dict[str, str] = {}
         
         print("Encoding Filenames")
@@ -145,22 +145,21 @@ class Video(Root):
         ### Create Video File Object for Each Video ###
         
         for index in range(l):
-            vfs.append("")
-            vfs[index] = VF(os.path.join(self.__root__, self.videoPath, files[index]))
-            file = vfs[index]
+        
+            vfs.append(VF(os.path.join(self.__root__, self.videoPath, files[index])))
             
-            fname = file.filename
+            file = vfs[index]
             
             file.data["hashed"] = "_%s_%s.%s" % (self.objectName, md5(file.absolutePath), file.fileFormat)
             
             file.data["tmp_filename"] = os.path.join(self.videoPath, file.data["hashed"])
             file.data["tmp_processed"] = os.path.join(self.processed, file.data["hashed"])
             
-            tmp[file.data["hashed"]] = fname
+            tmp[file.data["hashed"]] = file.filename
             
             file.rename(file.data["hashed"])
             
-            print("  %s -> %s" % (fname, file.data["hashed"]))
+            print("  %s -> %s" % (tmp[file.data["hashed"]], file.data["hashed"]))
         
         self.fs.createBackup("video list", tmp, self.videoPath, self.videoPath)
         
@@ -213,8 +212,10 @@ class Video(Root):
             
         except BaseException as be:
             # For debug only
+            
             exc_type, exc_obj, exc_tb = sys.exc_info()
-            print("Line Error: %s" % exc_tb.tb_lineno or ".")
+            
+            # print("Line Error: %s" % exc_tb.tb_lineno or ".")
             print(be)
             exit(0)
     
@@ -227,7 +228,7 @@ class Video(Root):
         
         self.cmd.setInput([video.path, audio])
         self.cmd.setOutput(output)
-        self.cmd.setTitle(conf.get("title", "Final Merge: Audio Video"))
+        self.cmd.setTitle(str(conf.get("title", "Final Merge: Audio Video")))
         self.execute([
             "-c:v \"%s\"" % conf.get("video_codec", "copy"),
             "-c:a \"%s\"" % conf.get("audio_codec", "aac"),
@@ -242,7 +243,7 @@ class Video(Root):
             "-fps_mode vfr",
             "-pix_fmt yuv420p",
             "-movflags +faststart" # Playable even it is still downloading
-        ], conf.get("execute", 1))
+        ], bool(conf.get("execute", 1)))
         
     
     def mergeVideos(self, files, o, conf):

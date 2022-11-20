@@ -8,41 +8,50 @@ from atexit import register as aeRegister
 
 """
 This Object is Self Dependency So Running It Directly is Possible.
- Just for your needs.
+just for your needs.
 """
 
-from __includes__.helpers import slugify, getFiles, createDir
+BK_DIR:str = "__includes__/assets/Failsafe"
+
+try:
+    from __includes__.helpers import slugify, getFiles, createDir
+except:
+    from sys import path
+    path.append("../")
+    from helpers import slugify, getFiles, createDir
+
+    BK_DIR = "../assets/Failsafe"
 
 class Failsafe:
     """
     Reverse modified filenames from unexpected exit
     """
     __prename:str = "__failsafe_"
-    __bk_dir:str = "__includes__/assets/Failsafe"
+    __bk_dir:str = BK_DIR
     __flag:bool = False
     __rData:list = []
 
-    def __init__(self, appname:str="Runtime"):
+    def __init__(self, appname:str="Runtime") -> None:
         self.appname:str = slugify(appname)
         
         self.preName:str = join(self.__bk_dir, self.__prename)
-        self.preName:str = self.joinNames(self.preName, self.appname)
+        self.preName = self.joinNames(self.preName, self.appname)
         
         createDir(self.__bk_dir)
         
-        self.noAutoFix = False
+        self.noAutoFix:bool = False
         
         # Call before exit
         aeRegister(self.checkCalls)
         
     
-    def createBackup(self, name, jdata, sourceIn, sourceOut):
+    def createBackup(self, name:str, jdata:dict, sourceIn:str, sourceOut:str) -> None:
         name = slugify(name)
         
-        absPath = self.joinNames(self.preName, name) + ".json"
+        absPath:str = self.joinNames(self.preName, name) + ".json"
         
         try:
-            obj = {
+            obj:dict[str, str] = {
                 "data" : dumps(jdata),
                 "input" : sourceIn,
                 "output" : sourceOut
@@ -63,24 +72,26 @@ class Failsafe:
             exit(0)
         
     
-    def restore(self):
+    def restore(self) -> None:
         """
         Get all files from backup directory
         then restore names and delete the backup file
         """
-        arr = []
-        err = []
-        files = getFiles(self.__bk_dir, ["json"])
+        arr:list[str] = []
+        err:list[dict[str, str|BaseException]] = []
+        files:list[str] = getFiles(self.__bk_dir, ["json"])
         
-        assert len(files) > 0, "No backup file found"
+        if len(files) == 0:
+            print("No backup file found")
+            return
         
         for file in files:
             try:
-                absPath = join(self.__bk_dir, file)
-                data = None
+                absPath:str = join(self.__bk_dir, file)
+                
                 with open(absPath, 'r') as f:
-                    datas = loads(f.read())
-                    parsed = loads(datas["data"])
+                    datas:dict = loads(f.read())
+                    parsed:dict = loads(datas["data"])
                 
                 if self.runRestore(datas, parsed, arr, err):
                     print("Unable to delete %s. Error occur." % file)
@@ -98,20 +109,19 @@ class Failsafe:
             print("Restore Complete")
         
     
-    def checkCalls(self):
+    def checkCalls(self) -> None:
         if self.noAutoFix:
-            return 0
+            return None
         
         if self.__flag:
-            arr = []
-            err = []
-            hasError = False
+            arr:list[str] = []
+            err:list[dict[str, str|BaseException]] = []
             
             for fname in self.__rData:
-                data = None
+                
                 with open(fname, "r") as f:
-                    datas = loads(f.read())
-                    parsed = loads(datas["data"])
+                    datas:dict = loads(f.read())
+                    parsed:dict = loads(datas["data"])
                 
                 if not self.runRestore(datas, parsed, arr, err):
                     remove(fname)
@@ -119,7 +129,7 @@ class Failsafe:
             self.printErrs(arr, err)
             
         
-    def printErrs(self, arr, err):
+    def printErrs(self, arr, err) -> None:
         if len(arr) > 0:
             print("\nFiles doesn't exists:")
             
@@ -139,18 +149,18 @@ class Failsafe:
             
         
     
-    def runRestore(self, datas, parsed, arr=[], err=[]):
-        hasError = False
+    def runRestore(self, datas, parsed, arr:list[str]=[], err:list[dict[str, str|BaseException]]=[]) -> bool:
+        hasError:bool = False
         
         for key, data in parsed.items():
             
             # Original Names
-            absIn = join(datas["input"], data)
-            absOut = join(datas["output"], data)
+            absIn:str = join(datas["input"], data)
+            absOut:str = join(datas["output"], data)
             
             # Temp Names
-            _absIn = join(datas["input"], key)
-            _absOut = join(datas["output"], key)
+            _absIn:str = join(datas["input"], key)
+            _absOut:str = join(datas["output"], key)
             
             try:
                 
@@ -186,5 +196,6 @@ class Failsafe:
     
 
 if __name__ == "__main__":
-    obj = Failsafe()
-    obj.restore()
+    Failsafe().restore()
+
+
