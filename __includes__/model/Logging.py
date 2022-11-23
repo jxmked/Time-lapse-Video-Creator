@@ -5,11 +5,11 @@
 # 
 # Logging System to keep track of errors or something you want
 
-from os import environ
+from __includes__.envres import envRes
 
 class Logging(object):
     # Global Variable
-    __logs__ = environ.get("__tlvc_logging__", [])
+    __logs__ = envRes.get("logging")
     
     def __init__(self):
         pass
@@ -26,7 +26,7 @@ class Logging(object):
             "exception" : EE
         })
         
-    def printLogs(self ):
+    def printLogs(self ) -> None:
         if len(self.__logs__) < 1:
             return None
         

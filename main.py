@@ -21,7 +21,7 @@ class Main(Root):
     def __init__(self):
         ## dev | prod
         envRes.set("ENV_MODE", "dev")
-
+        envRes.set("logging", [])
         envRes.set("ROOT", dirname(__file__))
         envRes.set("TMP_FOLDER", join(str(envRes.get("ROOT") or "."), "__includes__", "assets", "temp"))
         
