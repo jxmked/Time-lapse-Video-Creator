@@ -7,18 +7,22 @@ import re
 from hashlib import md5 as _md5_
 from natsort import natsorted
 
+
 def md5(value):
     m = _md5_()
     m.update(str(value).encode("utf-8"))
     return m.hexdigest()
 
+
 def sortThis(arr):
     return natsorted(arr)
 
+
 def createID(n):
     assert (n > 0 and 676 > n), "Cannot generate ID. Max 676, Min 1, Given %s" % n
-    
-    return str(chr((((n - 1) // 26) % 26) + 97) + chr((( n - 1) % 26) + 97))
+
+    return str(chr((((n - 1) // 26) % 26) + 97) + chr(((n - 1) % 26) + 97))
+
 
 def getFiles(dirIn, types):
     """
@@ -26,34 +30,35 @@ def getFiles(dirIn, types):
     Get all selected types of contents
     """
     f = []
-    
+
     if types == "*" or "*" in types:
         return os.listdir(dirIn)
-    
+
     for file in os.listdir(dirIn):
         for ext in types:
             if file.endswith(".%s" % ext):
                 f.append(file)
     return f
 
+
 def generateHex():
     """
     Generate Random 16 char hex
     """
     return secrets.token_hex(15)
-    
+
+
 def createDir(path):
     """
     Create Directory On Writable Path
     """
     try:
-        
+
         os.makedirs(path, 0o777)
     except BaseException as ex:
-        #raise (ex)
+        # raise (ex)
         pass
-        
-    
+
 
 def slugify(value, allow_unicode=False):
     # https://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
@@ -68,6 +73,7 @@ def slugify(value, allow_unicode=False):
     if allow_unicode:
         value = unicodedata.normalize('NFKC', value)
     else:
-        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = unicodedata.normalize('NFKD', value).encode(
+            'ascii', 'ignore').decode('ascii')
     value = re.sub(r'[^\w\s-]', '', value.lower())
     return re.sub(r'[-\s]+', '-', value).strip('-_')

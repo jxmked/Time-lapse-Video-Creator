@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding UTF-8 -*-
-# 
-# Video controller 
+#
+# Video controller
 # Handling Models
 
 from Root import Root
 from __includes__.envres import Env
 from __includes__.model.video import Video
 
+
 class Video_Controller(Root):
     def __init__(self) -> None:
-        
-        self.video:Video = Video()
-        self.files:list[str] = []
-        
-        
-        
-        
-    def getVideoFiles(self) -> None:
-        
-        
-        pass
 
+        self.video: Video = Video()
+        self.files: list[str] = []
+
+    def getVideoFiles(self) -> None:
+
+        pass
 
 
 """
