@@ -84,6 +84,10 @@ class xTools:
         shutil.copyfile(f, t)
     
     @staticmethod
+    def copy(f, t):
+      xTools.copyFile(f, t)
+      
+    @staticmethod
     def fileExists(path):
         return os.path.exists(path)
     

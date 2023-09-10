@@ -171,7 +171,9 @@ class Videos:
             exit(0)
         
         if len(files) == 1:
-            x = self.xtl.joinPath(self.fOutput, self.xtl.filename(files[0]))
+          #  x = self.xtl.joinPath(self.fOutput, self.xtl.filename(files[0]))
+            x = self.xtl.joinPath(self.fOutput, self.mergedFilename)
+        
             self.xtl.copy(files[0], x)
             return 0
         
